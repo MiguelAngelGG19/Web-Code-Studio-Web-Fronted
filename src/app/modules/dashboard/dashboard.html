@@ -1,0 +1,35 @@
+<div class="flex h-screen overflow-hidden">
+  <div class="flex flex-column bg-gray-900 w-16rem h-full p-3">
+    <div class="flex align-items-center px-3 mb-5">
+      <i class="pi pi-delta text-primary text-2xl mr-2"></i>
+      <span class="text-white text-xl font-bold">ACTIVA</span>
+    </div>
+
+    <div class="flex-grow-1">
+      <p-menu [model]="items" styleClass="w-full bg-transparent border-none"></p-menu>
+    </div>
+
+    <div class="mt-auto border-top-1 border-gray-700 pt-3 flex align-items-center">
+      <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" class="mr-2"></p-avatar>
+      <div class="flex flex-column">
+        <span class="text-white font-medium text-sm">Dr. Alejandro</span>
+        <span class="text-gray-500 text-xs">Fisioterapeuta</span>
+      </div>
+      <i class="pi pi-chevron-down text-gray-500 ml-auto"></i>
+    </div>
+  </div>
+
+  <div class="flex-grow-1 h-full surface-ground p-4 overflow-y-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+      <h2 class="m-0 text-gray-800">Expediente de Michael Chen</h2>
+      <div class="flex gap-2">
+        <i class="pi pi-bell text-gray-400 text-xl"></i>
+        <i class="pi pi-times text-gray-400 text-xl"></i>
+      </div>
+    </div>
+
+    <div class="surface-card p-4 shadow-1 border-round">
+       <p class="text-gray-600">Contenido del Dashboard aquí...</p>
+    </div>
+  </div>
+</div>

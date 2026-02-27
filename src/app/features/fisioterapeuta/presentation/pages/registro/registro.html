@@ -1,0 +1,58 @@
+<div class="flex h-screen w-full overflow-hidden surface-ground">
+  <div class="hidden md:flex flex-column justify-content-center w-6 p-6 relative bg-gray-900 z-1">
+    <div class="z-1 text-white pr-6">
+      <div class="flex align-items-center gap-2 mb-4">
+        <i class="pi pi-briefcase text-3xl text-teal-400"></i>
+        <span class="text-2xl font-bold tracking-widest">ACTIVA</span>
+      </div>
+      <h1 class="text-5xl font-semibold mb-3 line-height-2 mt-0">Gestión inteligente<br>para tu consultorio.</h1>
+      <p class="text-gray-400 text-lg line-height-3 max-w-25rem m-0">Únete a la red líder de fisioterapeutas. Simplifica tus citas, organiza expedientes y enfócate en lo que más importa: la recuperación de tus pacientes.</p>
+    </div>
+  </div>
+
+  <div class="flex flex-column align-items-center justify-content-center w-full md:w-6 px-4">
+    <div class="w-full" style="max-width: 24rem;"> <div class="mb-3 text-center">
+        <h2 class="text-3xl font-semibold text-color mb-1 mt-0">Crea tu cuenta</h2>
+        <p class="text-color-secondary m-0 text-sm">Comienza tu prueba gratuita de 14 días. No se requiere tarjeta.</p>
+      </div>
+
+      <p-button label="Registrarse con Google" icon="pi pi-google" styleClass="w-full p-button-outlined p-button-secondary mb-2 p-2 border-round-md"></p-button>
+
+      <p-divider align="center" styleClass="my-2">
+        <span class="text-color-secondary text-xs">o regístrate con tu correo</span>
+      </p-divider>
+
+      <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-2 p-fluid">
+        
+        <div class="flex flex-column gap-1">
+          <label class="text-color font-medium text-sm">Correo Electrónico</label>
+          <input pInputText type="email" formControlName="email" placeholder="nombre@ejemplo.com" class="p-2 border-round-md w-full">
+        </div>
+
+        <div class="flex flex-column gap-1">
+          <label class="text-color font-medium text-sm">Contraseña</label>
+          <p-password formControlName="password" [toggleMask]="true" placeholder="••••••••" styleClass="w-full" inputStyleClass="w-full p-2 border-round-md" [feedback]="false"></p-password>
+          <small class="text-color-secondary" style="font-size: 0.75rem;">Debe tener al menos 8 caracteres</small>
+        </div>
+
+        <div class="flex flex-column gap-1">
+          <label class="text-color font-medium text-sm">Confirmar contraseña</label>
+          <p-password formControlName="confirmPassword" [toggleMask]="true" placeholder="••••••••" styleClass="w-full" inputStyleClass="w-full p-2 border-round-md" [feedback]="false"></p-password>
+        </div>
+
+        <div class="flex align-items-center gap-2 mt-1">
+          <p-checkbox formControlName="terms" [binary]="true" inputId="terms"></p-checkbox>
+          <label for="terms" class="text-color-secondary cursor-pointer m-0 line-height-3" style="font-size: 0.8rem;">Acepto los Términos y la Política de Privacidad.</label>
+        </div>
+
+        <p-button label="Registrarse" type="submit" [disabled]="registroForm.invalid" styleClass="w-full p-2 bg-teal-800 border-none hover:bg-teal-700 transition-colors border-round-md mt-1 text-white"></p-button>
+      </form>
+
+      <div class="text-center mt-3 text-sm">
+        <span class="text-color-secondary">¿Ya tienes una cuenta? </span>
+        <a routerLink="/login" class="font-medium text-teal-400 hover:text-teal-300 no-underline cursor-pointer transition-colors">Inicia sesión</a>
+      </div>
+
+    </div>
+  </div>
+</div>
