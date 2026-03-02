@@ -1,6 +1,5 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar color="primary">
-    <ion-title>Mi Fisioterapia</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -52,7 +51,7 @@
   <ion-grid>
     <ion-row class="ion-text-center">
       <ion-col *ngFor="let dia of ['L', 'M', 'M', 'J', 'V', 'S', 'D']">
-        <ion-badge color="light" mode="ios">{{ dia }}</ion-badge>
+        <ion-badge color="light" mode="ios" translate="no">{{ dia }}</ion-badge>
       </ion-col>
     </ion-row>
   </ion-grid>

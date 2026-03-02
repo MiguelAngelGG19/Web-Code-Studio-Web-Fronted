@@ -3,19 +3,19 @@ import { IonicModule } from '@ionic/angular';
 import { of } from 'rxjs';
 
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
-import { Tab1Page } from './tab1.page';
+import { MyProgressPage } from './my-progress.page';
 import { GetUserProfileUseCase } from '../../core/usecases/get-user-profile.usecase';
 import { UserRepository } from '../../core/domain/repositories/user.repository';
 
 const mockUser = { id: 1, fullName: 'Test User', email: 'test@test.com', progress: 0.5 };
 
-describe('Tab1Page', () => {
-  let component: Tab1Page;
-  let fixture: ComponentFixture<Tab1Page>;
+describe('MyProgressPage', () => {
+  let component: MyProgressPage;
+  let fixture: ComponentFixture<MyProgressPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [Tab1Page],
+      declarations: [MyProgressPage],
       imports: [IonicModule.forRoot(), ExploreContainerComponentModule],
       providers: [
         GetUserProfileUseCase,
@@ -23,7 +23,7 @@ describe('Tab1Page', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Tab1Page);
+    fixture = TestBed.createComponent(MyProgressPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
