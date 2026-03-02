@@ -1,0 +1,21 @@
+.shadow-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+}
+
+.routine-card {
+  background: #fdf6ed; // Fondo crema suave para resaltar el área de ejercicios
+  border-radius: 16px;
+  border: 1px dashed var(--ion-color-warning);
+}
+
+.main-btn {
+  --box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+  font-weight: bold;
+  height: 45px;
+}
+
+.custom-progress {
+  height: 8px;
+  border-radius: 4px;
+}

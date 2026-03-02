@@ -18,9 +18,9 @@ interface Ejercicio {
 export class Tab1Page implements OnInit, OnDestroy {
   user: User | null = null;
   ejercicios: Ejercicio[] = [
-    { nombre: 'Sentadillas', repeticiones: '3 x 15 repeticiones', completado: false },
-    { nombre: 'Extensión de rodilla', repeticiones: '3 x 12 repeticiones', completado: true },
-    { nombre: 'Elevación de talón', repeticiones: '4 x 20 repeticiones', completado: false },
+    { nombre: 'Estiramiento de cuádriceps', repeticiones: '3 series de 10', completado: true },
+    { nombre: 'Elevación de pierna recta', repeticiones: '2 series de 15', completado: false },
+    { nombre: 'Flexión isométrica', repeticiones: '5 min', completado: false },
   ];
 
   private sub?: Subscription;
