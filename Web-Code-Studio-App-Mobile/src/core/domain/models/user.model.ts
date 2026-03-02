@@ -4,4 +4,6 @@ export interface User {
   email: string;
   nextAppointment?: string;
   progress: number;
+  specialist?: string;
+  therapyType?: string;
 }
