@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 import { Tab1Page } from './tab1.page';
-import { GetUserProfileUseCase } from '../../../usecases/get-user-profile.usecase';
+import { GetUserProfileUseCase } from '../../core/usecases/get-user-profile.usecase';
 import { UserRepository } from '../../core/domain/repositories/user.repository';
 
 const mockUser = { id: 1, fullName: 'Test User', email: 'test@test.com', progress: 0.5 };

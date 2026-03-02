@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from '../../core/domain/models/user.model';
-import { GetUserProfileUseCase } from '../../../usecases/get-user-profile.usecase';
+import { GetUserProfileUseCase } from '../../core/usecases/get-user-profile.usecase';
 
 interface Ejercicio {
   nombre: string;
