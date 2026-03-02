@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Mi Fisioterapia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item lines="none" class="ion-margin-bottom" *ngIf="user">
+    <ion-avatar slot="start">
+      <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+    </ion-avatar>
+    <ion-label>
+      <p>Hola,</p>
+      <h2><b>{{ user.fullName }}</b></h2>
+    </ion-label>
+  </ion-item>
+
+  <ion-card class="ion-no-margin" *ngIf="user">
+    <ion-card-content>
+      <ion-label>Progreso de recuperación: <b>{{ user.progress * 100 }}%</b></ion-label>
+      <ion-progress-bar [value]="user.progress" color="success" class="ion-margin-top"></ion-progress-bar>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list-header class="ion-margin-top">
+    <ion-label>EJERCICIOS DE HOY</ion-label>
+  </ion-list-header>
+
+  <ion-list lines="inset">
+    <ion-item *ngFor="let ej of ejercicios">
+      <ion-checkbox slot="start" [checked]="ej.completado"></ion-checkbox>
+      <ion-label>
+        <h3>{{ ej.nombre }}</h3>
+        <p>{{ ej.repeticiones }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
