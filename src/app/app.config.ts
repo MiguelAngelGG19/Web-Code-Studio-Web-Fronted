@@ -2,8 +2,8 @@ import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http'; // 1. Importar HttpClient
 import { routes } from './app.routes';
-import { PatientRepository } from './features/fisioterapeuta/domain/repositories/patient.repository';
-import { PatientHttpRepository } from './features/fisioterapeuta/infraestructure/repositories/patient-http.repository';
+import { PatientRepository } from './core/patient/domain/patient.repository';
+import { PatientHttpRepository } from './core/patient/infraestructure/patient-http.repository';
 
 export const appConfig: ApplicationConfig = {
   providers: [
