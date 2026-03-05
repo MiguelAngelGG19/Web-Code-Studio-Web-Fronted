@@ -12,10 +12,10 @@
   --activa-primary-light: #E0F7FA; /* Cyan súper claro (menta) para fondos de íconos */
   --activa-brand-dark: #0A192F;    /* El azul marino oscuro de la "pata" de la A del logo */
 
-  /* Tonos de Fondo y Superficies (Modo Claro) */
---activa-bg-main: #E2E8F0;       /* Gris azulado mate para el fondo general */
-  --activa-surface: #F4F7F9;       /* Un "blanco roto" (off-white) que no lastima la vista */
-  --activa-surface-border: #CBD5E1;/* Bordes un poco más definidos para dar contraste */
+  /* Tonos de Fondo y Superficies (Modo Claro Relajante / Anti-fatiga) */
+  --activa-bg-main: #DFE4EA;       /* Gris azulado con más cuerpo para el fondo general */
+  --activa-surface: #F1F5F9;       /* Tono perla/pizarra claro (0% blanco puro) para tarjetas y menús */
+  --activa-surface-border: #CBD5E1;/* Bordes en armonía para no verse tan duros */
 
   /* Tonos de Texto (Para fondos claros) */
   --activa-text-main: #1E293B;     /* Texto principal (Azul marino casi negro) */
@@ -35,8 +35,6 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  overflow: hidden; 
   font-family: var(--font-family); 
   background-color: var(--surface-ground); /* Forzamos el fondo oscuro general */
   color: var(--text-color);
@@ -50,3 +48,6 @@ html, body {
 .border-activa-primary { border-color: var(--activa-primary) !important; }
 .bg-activa-main { background-color: var(--activa-bg-main) !important; }
 .bg-activa-surface { background-color: var(--activa-surface) !important; }
+/* Evitar el blanco puro en PrimeFlex */
+.bg-white { background-color: var(--activa-surface) !important; }
+.bg-activa-primary-light { background-color: var(--activa-primary-light) !important; }
