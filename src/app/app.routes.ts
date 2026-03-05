@@ -1,12 +1,25 @@
 import { Routes } from '@angular/router';
+import { Menu } from './components/menu/menu';
+import { BancoEjerciciosComponent } from './components/banco-ejercicios/banco-ejercicios';
+import { PatientListComponent } from './features/fisioterapeuta/presentation/pages/patient-list/patient-list';
+import { PatientCreateComponent } from './features/fisioterapeuta/presentation/pages/patient-create/patient-create';
 
 export const routes: Routes = [
   // 1. Dominio Fisioterapeuta (Pantallas de Login/Registro públicas)
   {
+
     path: 'fisioterapeuta',
     loadChildren: () => import('./features/fisioterapeuta/fisioterapeuta.routes').then(m => m.FISIOTERAPEUTA_ROUTES)
   },
-
+{ 
+    path: 'dashboard', 
+    component: Menu, 
+    children: [
+      { path: 'ejercicios', component: BancoEjerciciosComponent },
+      { path: 'pacientes', component: PatientListComponent },
+      { path: 'nuevo-paciente', component: PatientCreateComponent }
+    ]
+  },
   // 2. Dominio Privado (Aquí irá el Dashboard y Pacientes más adelante)
   // Lo dejamos comentado hasta que creemos esos componentes
   /*
