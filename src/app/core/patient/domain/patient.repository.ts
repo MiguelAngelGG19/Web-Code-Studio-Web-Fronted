@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Patient } from '../models/patient.model';
+import { Patient } from './patient.model';
 
 // Esta clase abstracta funciona como nuestro "Puerto". 
 // Define el contrato, pero NO cómo se conecta.
