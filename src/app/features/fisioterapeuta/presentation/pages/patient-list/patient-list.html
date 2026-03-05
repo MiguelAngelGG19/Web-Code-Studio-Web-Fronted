@@ -1,0 +1,98 @@
+<div class="fadein">
+  
+  <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center mb-4 gap-4">
+    <div>
+      <h1 class="text-3xl font-bold text-color m-0 mb-2">Agenda de Pacientes</h1>
+      <p class="text-color-secondary m-0">Gestiona citas, diagnósticos y rutinas de ejercicios.</p>
+    </div>
+    <div class="flex gap-3">
+      <p-button label="Exportar" icon="pi pi-external-link" styleClass="bg-white text-color border-1 surface-border hover:surface-hover border-round-xl px-4 py-2 font-bold shadow-none"></p-button>
+      <p-button label="Agregar Nuevo Paciente" icon="pi pi-plus" styleClass="bg-activa-primary border-none shadow-1 hover:bg-activa-primary-hover border-round-xl px-4 py-2 font-bold"></p-button>
+    </div>
+  </div>
+
+ <div class="bg-white border-round-2xl border-1 surface-border p-2 mb-5 flex flex-column xl:flex-row gap-2 align-items-center shadow-none">
+    
+    <span class="p-input-icon-left w-full xl:w-30rem">
+      <i class="pi pi-search text-color-secondary ml-3"></i>
+      <input pInputText type="text" placeholder="Buscar por nombre" class="w-full border-none py-2 shadow-none text-color-secondary font-medium" style="padding-left: 4rem;">
+    </span>
+    
+    <div class="border-left-1 surface-border hidden xl:block" style="height: 2rem;"></div>
+    
+    <div class="flex gap-2 overflow-x-auto w-full pb-2 xl:pb-0 px-3 align-items-center">
+      
+      <button class="flex-shrink-0 p-button p-component bg-activa-primary-light text-activa-primary border-none border-round-xl px-4 py-2 font-bold transition-colors">
+        Todos los Pacientes (3)
+      </button>
+      
+      <button class="flex-shrink-0 p-button p-component bg-transparent text-color border-none hover:surface-hover border-round-xl px-4 py-2 font-bold transition-colors">
+        Nueva Consulta
+      </button>
+
+    </div>
+  </div>
+
+  <div class="grid formgrid">
+    
+    <div *ngFor="let patient of patients" class="col-12 md:col-6 xl:col-4 mb-4 p-2">
+      <div class="bg-white border-round-2xl border-1 surface-border p-4 shadow-none flex flex-column h-full hover:shadow-2 transition-shadow duration-300">
+        
+        <div class="flex gap-3 mb-4">
+          <div class="relative flex-shrink-0">
+            <img [src]="patient.avatar" class="border-circle w-4rem h-4rem object-cover shadow-1">
+            <div class="absolute bottom-0 right-0 border-circle border-2 border-white w-1rem h-1rem" [ngClass]="patient.statusDot"></div>
+          </div>
+          <div class="flex flex-column justify-content-center flex-1 overflow-hidden">
+            <div class="flex align-items-center gap-2 mb-1">
+              <span class="font-bold text-lg text-color white-space-nowrap overflow-hidden text-overflow-ellipsis">{{patient.name}}</span>
+              <span class="text-xs font-bold px-2 py-1 border-round-md flex-shrink-0 tracking-wide" [ngClass]="patient.tagClass">{{patient.tag}}</span>
+            </div>
+            <span class="text-color-secondary text-sm mb-1">{{patient.phone}}</span>
+            <span class="text-color-secondary text-xs flex align-items-center gap-1 font-medium"><i [class]="patient.dateIcon"></i> {{patient.dateText}}</span>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mb-4 bg-gray-50 border-round-xl p-3">
+          <div class="flex flex-column flex-1">
+            <span class="text-xs font-bold text-color-secondary mb-1 tracking-wide">MOTIVO</span>
+            <span class="font-bold text-sm" [ngClass]="patient.motivoColor">{{patient.motivo}}</span>
+          </div>
+          <div class="flex flex-column flex-1">
+            <span class="text-xs font-bold text-color-secondary mb-1 tracking-wide">DIAGNÓSTICO</span>
+            <span class="font-bold text-sm" [ngClass]="patient.diagnosticoColor">{{patient.diagnostico}}</span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <span class="text-xs font-bold text-color-secondary block mb-2 tracking-wide">ÚLTIMA NOTA SOAP</span>
+          <p class="text-sm text-color-secondary m-0 line-height-3">{{patient.notaSOAP}}</p>
+        </div>
+
+        <div class="mb-4 flex-1">
+          <div class="flex justify-content-between align-items-center mb-3">
+            <span class="text-xs font-bold text-color flex align-items-center gap-2 tracking-wide"><i class="pi pi-arrows-alt text-activa-primary"></i> RUTINA ACTIVA</span>
+            <span class="text-xs font-bold text-activa-primary cursor-pointer hover:underline">Ver todo</span>
+          </div>
+          
+          <div class="flex align-items-start gap-2 mb-2">
+            <i class="pi pi-check-circle text-green-500 mt-1 text-lg"></i>
+            <span class="text-sm text-color font-medium line-height-2">Deslizamientos en pared <span class="text-color-secondary font-normal">(3 series x 10 reps)</span></span>
+          </div>
+          <div class="flex align-items-start gap-2">
+            <i class="pi pi-circle text-color-secondary mt-1 text-lg opacity-50"></i>
+            <span class="text-sm text-color-secondary font-medium line-height-2">Rotación externa con banda <span class="text-color-secondary font-normal">(15 reps)</span></span>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mt-auto pt-3 border-top-1 surface-border">
+          <p-button icon="pi pi-trash" styleClass="bg-gray-100 text-color-secondary border-none hover:surface-hover border-round-lg px-3 py-2 transition-colors shadow-none"></p-button>
+          <p-button label="Editar" styleClass="bg-white text-color border-1 surface-border hover:surface-hover border-round-lg flex-1 font-bold py-2 shadow-none"></p-button>
+          <p-button label="Agregar Ejercicio" icon="pi pi-plus" styleClass="bg-activa-primary border-none hover:bg-activa-primary-hover border-round-lg flex-1 font-bold py-2 shadow-none"></p-button>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+</div>
