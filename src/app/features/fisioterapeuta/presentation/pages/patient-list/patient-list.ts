@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-patient-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, InputTextModule],
+  imports: [CommonModule, RouterModule, ButtonModule, InputTextModule],
   templateUrl: './patient-list.html'
 })
 export class PatientListComponent implements OnInit {
