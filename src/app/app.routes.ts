@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { Menu } from './components/menu/menu';
 import { BancoEjerciciosComponent } from './components/banco-ejercicios/banco-ejercicios';
+import { PatientListComponent } from './features/fisioterapeuta/presentation/pages/patient-list/patient-list';
+
 export const routes: Routes = [
   // 1. Dominio Fisioterapeuta (Pantallas de Login/Registro públicas)
   {
@@ -12,7 +14,8 @@ export const routes: Routes = [
     path: 'dashboard', 
     component: Menu, 
     children: [
-      { path: 'ejercicios', component: BancoEjerciciosComponent }
+      { path: 'ejercicios', component: BancoEjerciciosComponent },
+      { path: 'pacientes', component: PatientListComponent }
     ]
   },
   // 2. Dominio Privado (Aquí irá el Dashboard y Pacientes más adelante)
