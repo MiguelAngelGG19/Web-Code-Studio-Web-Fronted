@@ -6,6 +6,14 @@ import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 
+export interface PerfilProfesional {
+  nombres: string;
+  apellidos: string;
+  cedula: string;
+  curp: string;
+  fechaNacimiento: Date;
+}
+
 @Component({
   selector: 'app-completar-perfi',
   standalone: true, // Aseguramos que sea Standalone
