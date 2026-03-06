@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PatientCreate } from './patient-create';
+// 1. CORRECCIÓN: Agregamos "Component" al nombre
+import { PatientCreateComponent } from './patient-create'; 
 
-describe('PatientCreate', () => {
-  let component: PatientCreate;
-  let fixture: ComponentFixture<PatientCreate>;
+describe('PatientCreateComponent', () => {
+  let component: PatientCreateComponent;
+  let fixture: ComponentFixture<PatientCreateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PatientCreate],
+      imports: [PatientCreateComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PatientCreate);
+    fixture = TestBed.createComponent(PatientCreateComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
