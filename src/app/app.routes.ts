@@ -17,9 +17,16 @@ export const routes: Routes = [
     children: [
       { path: 'ejercicios', component: BancoEjerciciosComponent },
       { path: 'pacientes', component: PatientListComponent },
-      { path: 'nuevo-paciente', component: PatientCreateComponent }
+      { path: 'nuevo-paciente', component: PatientCreateComponent },
+      {path: 'list-ejercicios', component: BancoEjerciciosComponent}
     ]
   },
+{
+  path: 'ejercicios',
+  redirectTo: 'dashboard/ejercicios',
+  pathMatch: 'full'
+},
+
   // 2. Dominio Privado (Aquí irá el Dashboard y Pacientes más adelante)
   // Lo dejamos comentado hasta que creemos esos componentes
   /*
@@ -44,4 +51,5 @@ export const routes: Routes = [
     path: '**', 
     redirectTo: 'fisioterapeuta/registro' 
   }
+  
 ];
