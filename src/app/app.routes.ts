@@ -3,6 +3,7 @@ import { Menu } from './components/menu/menu';
 import { BancoEjerciciosComponent } from './components/banco-ejercicios/banco-ejercicios';
 import { PatientListComponent } from './modules/fisioterapeuta/presentation/pages/patient-list/patient-list';
 import { PatientCreateComponent } from './modules/fisioterapeuta/presentation/pages/patient-create/patient-create';
+import { RegistroFisioComponent } from './modules/registro-fisio/registro-fisio'; // <-- Ajusta la ruta a tu estructura real
 
 export const routes: Routes = [
   // 1. Dominio Fisioterapeuta (Pantallas de Login/Registro públicas)
@@ -11,6 +12,7 @@ export const routes: Routes = [
     path: 'fisioterapeuta',
     loadChildren: () => import('./modules/fisioterapeuta/fisioterapeuta.routes').then(m => m.FISIOTERAPEUTA_ROUTES)
   },
+  { path: 'registro-fisio', component: RegistroFisioComponent },
 { 
     path: 'dashboard', 
     component: Menu, 
