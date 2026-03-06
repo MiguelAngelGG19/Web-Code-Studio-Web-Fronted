@@ -3,12 +3,18 @@
   <div class="flex flex-column lg:flex-row justify-content-between align-items-center mb-5 gap-4">
     <div>
       <h1 class="text-4xl font-bold m-0" style="color: #064e3b;">Banco de Ejercicios</h1>
-      <p class="text-600 m-0 font-medium">Prescripción por Zonas de Tratamiento - ACTIVA</p>
+      <p class="text-600 m-0 font-medium"></p>
     </div>
     <span class="p-input-icon-left w-full lg:w-20rem">
       <i class="pi pi-search text-teal-600"></i>
-      <input pInputText type="text" [(ngModel)]="searchTerm" (input)="onSearch()" 
-             placeholder="Buscar ejercicio..." class="w-full border-round-3xl py-2 px-5 shadow-none border-1 surface-border">
+      <input 
+        pInputText 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearch()" 
+        (keypress)="($any($event).charCode >= 65 && $any($event).charCode <= 90) || ($any($event).charCode >= 97 && $any($event).charCode <= 122) || $any($event).charCode === 32"
+        placeholder=""
+        class="w-full border-round-3xl py-2 px-5 shadow-none border-1 surface-border">
     </span>
   </div>
 
@@ -24,44 +30,21 @@
   <div class="grid" *ngIf="!loading">
     <div class="col-12 md:col-6 lg:col-4 xl:col-3 p-3" *ngFor="let exercise of filteredExercises">
       <div class="exercise-card-v2 border-1 surface-border bg-white border-round-2xl overflow-hidden shadow-1">
-        
         <div class="image-container-v2 relative">
           <img [src]="exercise.videoUrl || placeholderImg" (error)="$any($event.target).src = placeholderImg">
-          <span class="absolute top-0 right-0 m-2 bg-white-alpha-90 text-teal-800 text-xs font-bold px-2 py-1 border-round-lg shadow-1 uppercase">
-            {{ exercise.bodyZone }}
+          <span class="absolute top-0 right-0 m-2 bg-white-alpha-90 text-teal-800 text-xs font-bold px-2 py-1 border-round-lg">
+            {{ exercise.bodyZone | uppercase }}
           </span>
         </div>
-
         <div class="p-4 flex-1 flex flex-column">
           <h3 class="m-0 mb-2 text-lg font-bold text-900">{{ exercise.name }}</h3>
           <p class="m-0 text-sm text-600 description-text-v2 flex-1">{{ exercise.description }}</p>
-          
           <div class="mt-4">
             <p-button label="Asignar" icon="pi pi-user-plus" (onClick)="openAssignModal(exercise)"
-                      styleClass="w-full btn-assign-teal border-none border-round-xl font-bold py-2 shadow-2"></p-button>
+                      styleClass="w-full btn-assign-teal border-none border-round-xl font-bold py-2"></p-button>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<p-dialog header="Asignar Ejercicio" [(visible)]="showAssignModal" [modal]="true" [draggable]="false" [style]="{width: '100%', maxWidth: '420px'}">
-  <div class="flex flex-column gap-3 mt-3">
-    <p-listbox [options]="patients" [(ngModel)]="selectedPatient" optionLabel="firstName" 
-               [filter]="true" [listStyle]="{'max-height': '200px'}" placeholder="Buscar paciente...">
-      <ng-template let-patient pTemplate="item">
-        <div class="flex align-items-center gap-2">
-          <div class="w-2rem h-2rem border-circle bg-teal-100 flex align-items-center justify-content-center">
-            <i class="pi pi-user text-teal-600 text-xs"></i>
-          </div>
-          <span class="font-medium text-700">{{ patient.firstName }} {{ patient.lastNameP }}</span>
-        </div>
-      </ng-template>
-    </p-listbox>
-    <div class="flex justify-content-end gap-2 mt-2">
-      <p-button label="Cancelar" styleClass="p-button-text" (onClick)="showAssignModal = false"></p-button>
-      <p-button label="Confirmar" [disabled]="!selectedPatient" styleClass="btn-assign-teal px-4" (onClick)="confirmAssignment()"></p-button>
-    </div>
-  </div>
-</p-dialog>

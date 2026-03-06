@@ -59,10 +59,9 @@ $surface-hover: #f0fdfa;
 
   .description-text-v2 {
     display: -webkit-box;
-    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    height: 4.2rem;
+    height: 4.2rem;         
     line-height: 1.4;
   }
 }
