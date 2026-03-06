@@ -11,12 +11,10 @@ export class PatientUseCase {
   // Inyectamos el "Puerto" (la abstracción), no la implementación HTTP directa
   constructor(private patientRepository: PatientRepository) {}
 
+  executeCreate(patient: Patient): Observable<Patient> {
+    return this.patientRepository.createPatient(patient);
+  }
   getPatients(): Observable<Patient[]> {
     return this.patientRepository.getAllPatients();
-  }
-
-  addPatient(patient: Patient): Observable<Patient> {
-    // Aquí podríamos agregar lógica extra antes de enviar al backend
-    return this.patientRepository.createPatient(patient);
   }
 }
