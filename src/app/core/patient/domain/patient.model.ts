@@ -8,5 +8,9 @@ export interface Patient {
   height?: number;
   weight?: number;
   email?: string;
-  physiotherapist_id: number; // Requisito de la BD
+  physiotherapist_id: number;
+}
+
+export interface PatientApiResponse {
+  rows: Patient[];
 }

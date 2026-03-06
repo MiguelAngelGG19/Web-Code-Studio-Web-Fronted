@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-// Reemplaza los imports que tienen error por estos 3:
-import { PatientRepository } from '../../../../../core/patient/domain/patient.repository';
+import { PatientHttpRepository } from '../../../../../core/patient/infraestructure/patient-http.repository';
 import { Patient } from '../../../../../core/patient/domain/patient.model';
-import { PatientHttpRepository } from '../../../../../core/patient/infrastructure/http/patient-http.repository';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-patient-list',
@@ -41,11 +40,11 @@ export class PatientListComponent implements OnInit {
           const coloresEstado = ['bg-green-500', 'bg-gray-400', 'bg-orange-500'];
 
           return {
-            id: dbPatient.id,
+            id: dbPatient.idPaciente,
             
             // 1. DATOS REALES DE TU API
             // Unimos los nombres del backend en la variable "name" que espera tu HTML
-            name: `${dbPatient.firstName} ${dbPatient.lastNameP} ${dbPatient.lastNameM || ''}`.trim(),
+            name: `${dbPatient.first_name} ${dbPatient.last_name_p} ${dbPatient.last_name_m || ''}`.trim(),
             
             // Usamos la variable "phone" de tu HTML, pero le metemos el email de la BD 
             // (o un texto por defecto si no tiene)
@@ -68,7 +67,7 @@ export class PatientListComponent implements OnInit {
           };
         });
       },
-      error: (error) => {
+      error: (err: any) => {
         console.error('Hubo un error al conectar con la base de datos', err);
       }
     });
