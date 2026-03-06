@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Patient } from '../domain/patient.model';
 import { PatientRepository } from '../domain/patient.repository';
+// Importamos el environment
+import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientHttpRepository implements PatientRepository {
-  // Conectamos a tu endpoint oficial [cite: 4, 9]
-  private readonly apiUrl = 'http://localhost:3000/api/patients'; 
+  // Construimos la URL uniendo el baseUrl del environment y la ruta de patients
+  private readonly apiUrl = `${environment.webservice.baseUrl}/api/patients`; 
 
   constructor(private http: HttpClient) {}
 
