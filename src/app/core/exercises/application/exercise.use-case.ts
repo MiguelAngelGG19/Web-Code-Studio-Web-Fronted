@@ -7,7 +7,7 @@ import { ExerciseRepository } from '../domain/exercise.repository';
 export class ExerciseUseCase {
     constructor(private repository: ExerciseRepository) {}
 
-  listExercises(page: number = 1): Observable<{ rows: Exercise[], count: number }> {
+  listExercises(page: number, limit: number): Observable<{ rows: Exercise[], count: number }> {
     return this.repository.getAll(page, 10); // Ejemplo: 10 por página
   }
 

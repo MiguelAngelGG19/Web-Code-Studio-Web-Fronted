@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ExerciseUseCase } from '../../../core/exercises/application/exercise.use-case';
 import { Exercise } from '../../../core/exercises/domain/exercise.model';
-import { ExerciseListResult } from '../../../core/exercises/domain/exercise.repository';
 
 @Component({
   selector: 'app-listado-ejercicios',
@@ -36,7 +35,7 @@ export class ListadoEjercicios implements OnInit {
     const offset = (this.currentPage - 1) * this.pageSize;
 
     this.exerciseUseCase.listExercises(this.pageSize, offset).subscribe({
-      next: (result: ExerciseListResult) => {
+      next: (result: any) => {
         this.exercises = result.rows;
         this.totalCount = result.count;
         this.totalPages = Math.ceil(this.totalCount / this.pageSize);
