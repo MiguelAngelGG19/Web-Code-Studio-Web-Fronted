@@ -1,0 +1,83 @@
+/* Colores de identidad ACTIVA */
+$teal-primary: #14b8a6;   // Teal 500
+$teal-dark: #0f766e;      // Teal 700 (Para el presionado)
+$teal-deep: #0d617a;      // Verde oscuro esmeralda
+$surface-hover: #f0fdfa;
+
+/* Botones de Categoría */
+.category-btn {
+  background: white;
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+  padding: 0.6rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover:not(.active) {
+    background-color: $surface-hover;
+    border-color: $teal-primary;
+    color: $teal-primary;
+  }
+
+  &.active {
+    background-color: $teal-deep;
+    color: white;
+    border-color: $teal-deep;
+    box-shadow: 0 4px 10px rgba(6, 78, 59, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.94);
+    background-color: #022c22; // Verde casi negro al presionar fuerte
+  }
+}
+
+/* Tarjeta de Ejercicio */
+.exercise-card-v2 {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important;
+  }
+
+  .image-container-v2 {
+    height: 180px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .description-text-v2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 4.2rem;         
+    line-height: 1.4;
+  }
+}
+
+/* Botón Asignar (PrimeNG override) */
+::ng-deep .btn-assign-teal {
+  background-color: $teal-primary !important;
+  transition: all 0.2s !important;
+
+  &:hover {
+    background-color: $teal-dark !important;
+  }
+
+  &:active {
+    transform: scale(0.96) !important;
+    background-color: $teal-deep !important; // Verde oscuro al presionar
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2) !important;
+  }
+}

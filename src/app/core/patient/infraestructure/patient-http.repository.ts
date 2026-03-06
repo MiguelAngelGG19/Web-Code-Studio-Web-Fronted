@@ -25,4 +25,7 @@ export class PatientHttpRepository implements PatientRepository {
   createPatient(patient: Patient): Observable<Patient> {
     return this.http.post<Patient>(this.apiUrl, patient);
   }
+  updatePatient(id: number, patient: any): Observable<Patient> {
+    return this.http.put<Patient>(`${this.apiUrl}/${id}`, patient);
+  }
 }

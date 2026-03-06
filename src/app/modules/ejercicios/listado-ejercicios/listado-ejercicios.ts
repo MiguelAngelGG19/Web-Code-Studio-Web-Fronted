@@ -1,26 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ExerciseUseCase } from '../../../core/exercises/application/exercise.use-case';
 import { Exercise } from '../../../core/exercises/domain/exercise.model';
+import { ExerciseUseCase } from '../../../core/exercises/application/exercise.use-case';
 
 @Component({
   selector: 'app-listado-ejercicios',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './listado-ejercicios.html',
-  styleUrl: './listado-ejercicios.scss',
+  styleUrls: ['./listado-ejercicios.scss']
 })
 export class ListadoEjercicios implements OnInit {
-  exercises: Exercise[] = [];
+  exercises: Exercise[] = [];         
+  filteredExercises: Exercise[] = []; 
+  searchTerm: string = '';            
   loading = false;
-  errorMessage = '';
-  
-  // Paginación
-  currentPage = 1;
-  pageSize = 10;
-  totalCount = 0;
-  totalPages = 0;
 
   constructor(private exerciseUseCase: ExerciseUseCase) {}
 
@@ -30,43 +25,29 @@ export class ListadoEjercicios implements OnInit {
 
   loadExercises(): void {
     this.loading = true;
-    this.errorMessage = '';
-
-    const offset = (this.currentPage - 1) * this.pageSize;
-
-    this.exerciseUseCase.listExercises(this.pageSize, offset).subscribe({
-      next: (result: any) => {
-        this.exercises = result.rows;
-        this.totalCount = result.count;
-        this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+    this.exerciseUseCase.listExercises(1, 10).subscribe({
+      next: (result) => {
+        this.exercises = result.rows; 
+        this.filteredExercises = result.rows;
         this.loading = false;
       },
-      error: (err: any) => {
-        this.loading = false;
-        this.errorMessage = err?.error?.message || 'Error al cargar los ejercicios';
-        console.error('Error:', err);
-      },
+      error: () => this.loading = false
     });
   }
 
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.loadExercises();
+  onSearch(): void {
+    const term = this.normalizeText(this.searchTerm);
+    if (!term) {
+      this.filteredExercises = [...this.exercises];
+      return;
     }
+    this.filteredExercises = this.exercises.filter(ex => 
+      this.normalizeText(ex.name).includes(term) || 
+      this.normalizeText(ex.bodyZone || '').includes(term)
+    );
   }
 
-  prevPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.loadExercises();
-    }
-  }
-
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.loadExercises();
-    }
+  private normalizeText(text: string): string {
+    return text ? text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim() : '';
   }
 }
