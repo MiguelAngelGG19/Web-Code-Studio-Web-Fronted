@@ -8,7 +8,6 @@ import { PatientRepository } from '../domain/patient.repository';
 })
 export class PatientUseCase {
   
-  // Inyectamos el "Puerto" (la abstracción), no la implementación HTTP directa
   constructor(private patientRepository: PatientRepository) {}
 
   executeCreate(patient: Patient): Observable<Patient> {
@@ -16,5 +15,10 @@ export class PatientUseCase {
   }
   getPatients(): Observable<Patient[]> {
     return this.patientRepository.getAllPatients();
+  }
+
+  // ¡NUEVO MÉTODO PARA EDITAR!
+  executeUpdate(id: number, patient: any): Observable<Patient> {
+    return this.patientRepository.updatePatient(id, patient);
   }
 }

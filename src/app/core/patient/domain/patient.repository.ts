@@ -6,4 +6,5 @@ import { Patient } from './patient.model';
 export abstract class PatientRepository {
   abstract getAllPatients(): Observable<Patient[]>;
   abstract createPatient(patient: Patient): Observable<Patient>;
+  abstract updatePatient(id: number, patient: any): Observable<Patient>;
 }

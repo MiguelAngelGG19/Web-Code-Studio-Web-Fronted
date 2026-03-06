@@ -67,44 +67,83 @@ export class PatientCreateComponent implements OnInit {
   }
 
   guardarPaciente() {
-    // ¡LA MAGIA AQUÍ! Limpiamos cualquier alerta anterior en cuanto se presiona el botón
     this.messageService.clear();
 
-    if (!this.nuevoPaciente.first_name || !this.nuevoPaciente.last_name_p) {
-      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'El nombre y apellido paterno son obligatorios.' });
-      return;
-    }
+    const p = this.nuevoPaciente;
 
-    if (!this.regexLetras.test(this.nuevoPaciente.first_name) || !this.regexLetras.test(this.nuevoPaciente.last_name_p)) {
-      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'El nombre y apellido paterno solo pueden contener letras.' });
-      return;
-    }
-
-    if (this.nuevoPaciente.last_name_m && !this.regexLetras.test(this.nuevoPaciente.last_name_m)) {
-      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'El apellido materno solo puede contener letras.' });
-      return;
-    }
-
-    if (!this.nuevoPaciente.birth_year || !this.nuevoPaciente.sex || !this.nuevoPaciente.height || !this.nuevoPaciente.weight || !this.nuevoPaciente.email) {
+    // 1. Validación de campos obligatorios
+    if (!p.first_name || !p.last_name_p || !p.email || !p.birth_year || !p.sex || !p.height || !p.weight) {
        this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Por favor, llena TODOS los campos.' });
        return;
     }
 
+    // 2. Validación de solo letras
+    if (!this.regexLetras.test(p.first_name) || !this.regexLetras.test(p.last_name_p)) {
+      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'El nombre y apellido paterno solo pueden contener letras.' });
+      return;
+    }
+    if (p.last_name_m && !this.regexLetras.test(p.last_name_m)) {
+      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'El apellido materno solo puede contener letras.' });
+      return;
+    }
+
+    // 3. Validación de Correo
+    if (!this.regexEmail.test(p.email)) {
+      this.messageService.add({ severity: 'warn', summary: 'Correo inválido', detail: 'Por favor, proporciona un correo electrónico válido.' });
+      return;
+    }
+
+    // 4. Validación estricta del Año de Nacimiento
+    const currentYear = new Date().getFullYear();
+    const birthYearNum = Number(p.birth_year);
+    if (birthYearNum < 1900 || birthYearNum > currentYear) {
+      this.messageService.add({ 
+        severity: 'warn', 
+        summary: 'Año incorrecto', 
+        detail: `El año de nacimiento debe estar entre 1900 y ${currentYear}.` 
+      });
+      return;
+    }
+
+    // 5. Validación lógica de Estatura
+    const alturaNum = Number(p.height);
+    if (alturaNum < 0.40 || alturaNum > 2.50) {
+      this.messageService.add({ 
+        severity: 'warn', 
+        summary: 'Revisa la estatura', 
+        detail: 'La estatura debe estar en metros (ej. 1.75). Asegúrate de usar el punto decimal.' 
+      });
+      return;
+    }
+
+    // 6. Validación lógica de Peso
+    const pesoNum = Number(p.weight);
+    if (pesoNum <= 0 || pesoNum > 700) {
+      this.messageService.add({ 
+        severity: 'warn', 
+        summary: 'Revisa el peso', 
+        detail: 'El peso debe ser mayor a 0 y menor a 700 Kg. Revisa tus decimales.' 
+      });
+      return;
+    }
+
+    // 7. Preparar payload (ya con la seguridad de que todo está validado)
     const payloadParaBackend = {
-      firstName: this.limpiarTexto(this.nuevoPaciente.first_name),
-      lastNameP: this.limpiarTexto(this.nuevoPaciente.last_name_p),
-      lastNameM: this.nuevoPaciente.last_name_m ? this.limpiarTexto(this.nuevoPaciente.last_name_m) : undefined,
-      birthYear: this.nuevoPaciente.birth_year,
-      sex: this.nuevoPaciente.sex,
-      height: this.nuevoPaciente.height,
-      weight: this.nuevoPaciente.weight,
-      email: this.nuevoPaciente.email.toLowerCase().trim(),
+      firstName: this.limpiarTexto(p.first_name),
+      lastNameP: this.limpiarTexto(p.last_name_p),
+      lastNameM: p.last_name_m ? this.limpiarTexto(p.last_name_m) : undefined,
+      birthYear: birthYearNum,
+      sex: p.sex,
+      height: alturaNum,
+      weight: pesoNum,
+      email: p.email.toLowerCase().trim(),
       physiotherapistId: 1 
     };
 
+    console.log(`📦 Enviando POST al backend:`, payloadParaBackend);
+
     this.patientUseCase.executeCreate(payloadParaBackend as any).subscribe({
       next: (respuesta: any) => {
-        // Limpiamos de nuevo por si acaso antes del éxito
         this.messageService.clear(); 
         this.messageService.add({ severity: 'success', summary: '¡Éxito!', detail: 'Paciente registrado correctamente.' });
         
@@ -113,10 +152,8 @@ export class PatientCreateComponent implements OnInit {
         }, 1500);
       },
       error: (err: any) => {
-        // Limpiamos las notificaciones anteriores para que no se apilen errores del backend
         this.messageService.clear(); 
-        
-        const mensajeBackend = err.error?.message || 'Error de validación.';
+        const mensajeBackend = err.error?.message || err.error?.error || 'Error de validación en el servidor.';
         this.messageService.add({ severity: 'error', summary: 'Error', detail: mensajeBackend });
       }
     });
