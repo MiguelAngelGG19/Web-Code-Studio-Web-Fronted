@@ -3,7 +3,8 @@ import { Menu } from './components/menu/menu';
 import { BancoEjerciciosComponent } from './components/banco-ejercicios/banco-ejercicios';
 import { PatientListComponent } from './modules/fisioterapeuta/presentation/pages/patient-list/patient-list';
 import { PatientCreateComponent } from './modules/fisioterapeuta/presentation/pages/patient-create/patient-create';
-
+import { DashboardComponent } from './modules/fisioterapeuta/presentation/pages/dashboard/dashboard';      // <-- importa
+import { CalendarioComponent } from './modules/fisioterapeuta/presentation/pages/calendario/calendario'; 
 export const routes: Routes = [
   // 1. Dominio Fisioterapeuta (Pantallas de Login/Registro públicas)
   {
@@ -15,6 +16,8 @@ export const routes: Routes = [
     path: 'dashboard', 
     component: Menu, 
     children: [
+      { path: 'inicio', component: DashboardComponent },  // el dashboard principal
+      { path: 'calendario', component: CalendarioComponent },
       { path: 'ejercicios', component: BancoEjerciciosComponent },
       { path: 'pacientes', component: PatientListComponent },
       { path: 'nuevo-paciente', component: PatientCreateComponent }

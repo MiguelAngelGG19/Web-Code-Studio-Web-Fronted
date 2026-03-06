@@ -1,0 +1,108 @@
+<div class="dashboard p-m-3">
+    <!-- Título principal -->
+    <h1 class="p-text-center p-mb-4">Resumen del Día</h1>
+
+    <!-- Primera fila: tres tarjetas de resumen -->
+    <div class="p-grid">
+        <!-- Citas Hoy -->
+        <div class="p-col-12 p-md-4">
+            <p-card header="Citas Hoy">
+                <div class="p-d-flex p-jc-between p-mb-2">
+                    <span>Confirmadas</span>
+                    <span class="p-tag p-tag-success">6</span>
+                </div>
+                <div class="p-d-flex p-jc-between">
+                    <span>Pendientes</span>
+                    <span class="p-tag p-tag-warning">2</span>
+                </div>
+            </p-card>
+        </div>
+
+        <!-- Cumplimiento de Rutinas -->
+        <div class="p-col-12 p-md-4">
+            <p-card header="Cumplimiento de Rutinas">
+                <p>Base total de pacientes activos</p>
+                <p-progressBar value="75" [showValue]="true"></p-progressBar>
+                <small class="p-d-block p-mt-2">75% de cumplimiento promedio</small>
+            </p-card>
+        </div>
+
+        <!-- Alertas de Dolor -->
+        <div class="p-col-12 p-md-4">
+            <p-card header="Alertas de Dolor">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <span class="p-text-bold" style="font-size: 2rem;">3</span>
+                    <i class="pi pi-exclamation-triangle" style="color: red; font-size: 2rem;"></i>
+                </div>
+                <p>Requieren atención inmediata</p>
+                <p-button label="Ver alertas" icon="pi pi-arrow-right" iconPos="right"
+                    styleClass="p-button-outlined"></p-button>
+            </p-card>
+        </div>
+    </div>
+
+    <!-- Segunda fila: Tráfico Semanal -->
+    <div class="p-grid p-mt-4">
+        <div class="p-col-12">
+            <p-card header="Tráfico Semanal de Pacientes">
+                <p>Días con mayor afluencia de citas</p>
+                <p-chart type="bar" [data]="traficoSemanalData" [options]="traficoSemanalOptions"></p-chart>
+            </p-card>
+        </div>
+    </div>
+
+    <!-- Tercera fila: dos columnas -->
+    <div class="p-grid p-mt-4">
+        <!-- Columna izquierda: Esta Semana + Contactar Inmediatamente -->
+        <div class="p-col-12 p-lg-6">
+            <p-card header="Esta Semana">
+                <div class="p-d-flex p-flex-column">
+                    <div class="p-d-flex p-jc-between p-ai-center p-mb-2">
+                        <div>
+                            <strong>Roberto Gomez</strong> - Recuperación LCA<br>
+                            <span class="p-text-italic">"Sentí un piquete fuerte al bajar en la sentadilla."</span>
+                        </div>
+                        <p-tag value="Urgente" severity="danger"></p-tag>
+                    </div>
+                    <p-button label="Contactar Inmediatamente" icon="pi pi-phone"
+                        styleClass="p-button-danger p-mt-2"></p-button>
+                </div>
+            </p-card>
+        </div>
+
+        <!-- Columna derecha: Agenda Próxima + Alertas + Contacto -->
+        <div class="p-col-12 p-lg-6">
+            <p-card header="Agenda Próxima" class="p-mb-3">
+                <div class="p-d-flex p-ai-center p-mb-2">
+                    <p-tag value="AHORA" severity="success" class="p-mr-2"></p-tag>
+                    <span>Mariana López</span>
+                </div>
+                <!-- Aquí puedes iterar con *ngFor cuando tengas datos -->
+            </p-card>
+
+            <p-card header="Alerta de Feedback" class="p-mb-3">
+                <div class="p-d-flex p-jc-between p-ai-center">
+                    <span class="p-text-bold" style="font-size: 1.5rem;">3 Críticas</span>
+                    <i class="pi pi-comment" style="font-size: 1.5rem; color: var(--orange-500);"></i>
+                </div>
+            </p-card>
+
+            <p-card header="Contacto Inmediatamente">
+                <div class="p-d-flex p-flex-column">
+                    <div class="p-mb-2">
+                        <strong>Ana Paula</strong> - Lumbalgia Crónica<br>
+                        No completó su rutina ayer.
+                    </div>
+                    <p-button label="Contactar" icon="pi pi-whatsapp" styleClass="p-button-outlined"></p-button>
+                </div>
+            </p-card>
+        </div>
+    </div>
+
+    <!-- Footer con ajustes -->
+    <div class="p-d-flex p-jc-between p-ai-center p-mt-4 p-p-3"
+        style="background: var(--surface-100); border-radius: 8px;">
+        <span>Dr. Alejandro Fisioterapeuta</span>
+        <p-button icon="pi pi-cog" label="Ajustes" styleClass="p-button-text"></p-button>
+    </div>
+</div>
