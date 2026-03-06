@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+// Reemplaza los imports que tienen error por estos 3:
+import { PatientRepository } from '../../../../../core/patient/domain/patient.repository';
+import { Patient } from '../../../../../core/patient/domain/patient.model';
+import { PatientHttpRepository } from '../../../../../core/patient/infrastructure/http/patient-http.repository';
 
 @Component({
   selector: 'app-patient-list',
@@ -11,58 +15,62 @@ import { InputTextModule } from 'primeng/inputtext';
   templateUrl: './patient-list.html'
 })
 export class PatientListComponent implements OnInit {
+  // Tu arreglo mantiene el mismo formato
   patients: any[] = [];
 
+  // Inyectamos tu servicio real
+  private patientRepo = inject(PatientHttpRepository);
+
   ngOnInit() {
-    this.patients = [
-      {
-        id: 1,
-        name: 'Sarah Jenkins',
-        phone: '+1 (555) 019-2834',
-        tag: 'POST-OPERATORIO',
-        tagClass: 'bg-orange-100 text-orange-500',
-        dateIcon: 'pi pi-calendar',
-        dateText: 'Próxima: Hoy, 2:00 PM',
-        motivo: 'Dolor de Hombro',
-        motivoColor: 'text-red-500',
-        diagnostico: 'Manguito Rotador',
-        diagnosticoColor: 'text-activa-primary',
-        notaSOAP: 'Paciente reporta dolor reducido (3/10) durante movimientos por encima de l...',
-        avatar: 'https://i.pravatar.cc/150?img=47',
-        statusDot: 'bg-green-500'
+    this.cargarPacientesReales();
+  }
+
+  cargarPacientesReales() {
+    this.patientRepo.getAllPatients().subscribe({
+      next: (datosReales: Patient[]) => {
+        // Mapeamos (transformamos) la información del backend a las variables que usa tu HTML
+        this.patients = datosReales.map((dbPatient, index) => {
+          
+          // Un pequeño arreglo para alternar tus fotos y colores de estado 
+          // dependiendo de la posición del paciente en la lista
+          const avatares = [
+            'https://i.pravatar.cc/150?img=47', 
+            'https://i.pravatar.cc/150?img=11', 
+            'https://i.pravatar.cc/150?img=5'
+          ];
+          const coloresEstado = ['bg-green-500', 'bg-gray-400', 'bg-orange-500'];
+
+          return {
+            id: dbPatient.id,
+            
+            // 1. DATOS REALES DE TU API
+            // Unimos los nombres del backend en la variable "name" que espera tu HTML
+            name: `${dbPatient.firstName} ${dbPatient.lastNameP} ${dbPatient.lastNameM || ''}`.trim(),
+            
+            // Usamos la variable "phone" de tu HTML, pero le metemos el email de la BD 
+            // (o un texto por defecto si no tiene)
+            phone: dbPatient.email || 'Sin información de contacto',
+
+            // 2. DATOS DE DISEÑO (Para que tus tarjetas se sigan viendo geniales)
+            tag: 'NUEVA',
+            tagClass: 'bg-green-100 text-green-600',
+            dateIcon: 'pi pi-calendar',
+            dateText: 'Consulta de valoración',
+            motivo: 'Evaluación general',
+            motivoColor: 'text-color',
+            diagnostico: 'Pendiente',
+            diagnosticoColor: 'text-activa-primary',
+            notaSOAP: 'Paciente ingresado desde el sistema central. Pendiente de evaluación...',
+            
+            // Asignamos una imagen y un color diferente usando el índice
+            avatar: avatares[index % 3], 
+            statusDot: coloresEstado[index % 3]
+          };
+        });
       },
-      {
-        id: 2,
-        name: 'Michael Chen',
-        phone: '+1 (555) 987-6543',
-        tag: 'CRÓNICO',
-        tagClass: 'bg-teal-100 text-teal-600',
-        dateIcon: 'pi pi-calendar-times',
-        dateText: 'Visto por última vez: hace 2 días',
-        motivo: 'Inestabilidad...',
-        motivoColor: 'text-color',
-        diagnostico: 'Rehabilitació...',
-        diagnosticoColor: 'text-activa-primary',
-        notaSOAP: 'La hinchazón ha disminuido significativamente. Comenzó ejercici...',
-        avatar: 'https://i.pravatar.cc/150?img=11',
-        statusDot: 'bg-gray-400'
-      },
-      {
-        id: 3,
-        name: 'Emma Thomas',
-        phone: '+1 (555) 246-8101',
-        tag: 'NUEVA',
-        tagClass: 'bg-green-100 text-green-600',
-        dateIcon: 'pi pi-calendar',
-        dateText: 'Próxima: Mañana, 10:00 AM',
-        motivo: 'Espalda Baja',
-        motivoColor: 'text-color',
-        diagnostico: 'Distensión L...',
-        diagnosticoColor: 'text-activa-primary',
-        notaSOAP: 'Dolor agudo después de levantar objeto pesado. Flexión hacia adelant...',
-        avatar: 'https://i.pravatar.cc/150?img=5',
-        statusDot: 'bg-green-500'
+      error: (error) => {
+        console.error('Hubo un error al conectar con la base de datos', err);
       }
-    ];
+    });
   }
 }
