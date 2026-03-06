@@ -4,6 +4,11 @@ import { BancoEjerciciosComponent } from './components/banco-ejercicios/banco-ej
 import { PatientListComponent } from './modules/fisioterapeuta/presentation/pages/patient-list/patient-list';
 import { PatientCreateComponent } from './modules/fisioterapeuta/presentation/pages/patient-create/patient-create';
 import { RegistroFisioComponent } from './modules/registro-fisio/registro-fisio'; // <-- Ajusta la ruta a tu estructura real
+import { ExerciseHttpRepository } from './core/exercises/infraestructure/exercise-http.repository';
+import { ExerciseRepository } from './core/exercises/domain/exercise.repository';
+import { ExerciseUseCase } from './core/exercises/application/exercise.use-case';
+
+
 
 export const routes: Routes = [
   // 1. Dominio Fisioterapeuta (Pantallas de Login/Registro públicas)
@@ -13,15 +18,24 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/fisioterapeuta/fisioterapeuta.routes').then(m => m.FISIOTERAPEUTA_ROUTES)
   },
   { path: 'registro-fisio', component: RegistroFisioComponent },
+  {path: 'Ejercicios', component: BancoEjerciciosComponent},
+  
 { 
     path: 'dashboard', 
     component: Menu, 
     children: [
       { path: 'ejercicios', component: BancoEjerciciosComponent },
       { path: 'pacientes', component: PatientListComponent },
-      { path: 'nuevo-paciente', component: PatientCreateComponent }
+      { path: 'nuevo-paciente', component: PatientCreateComponent },
+      
     ]
   },
+
+
+   
+
+
+
   // 2. Dominio Privado (Aquí irá el Dashboard y Pacientes más adelante)
   // Lo dejamos comentado hasta que creemos esos componentes
   /*
@@ -46,4 +60,5 @@ export const routes: Routes = [
     path: '**', 
     redirectTo: 'fisioterapeuta/registro' 
   }
+  
 ];
