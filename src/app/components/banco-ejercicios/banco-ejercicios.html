@@ -1,97 +1,67 @@
-<div class="fadein">
+<div class="fadein p-4" style="background-color: #f8fafc; min-height: 100vh;">
   
-  <div class="flex flex-column lg:flex-row justify-content-between align-items-start lg:align-items-center mb-5 gap-4">
+  <div class="flex flex-column lg:flex-row justify-content-between align-items-center mb-5 gap-4">
     <div>
-      <h1 class="text-3xl font-bold text-color m-0 mb-2">Banco de Ejercicios</h1>
-      <p class="text-color-secondary m-0">Gestiona y asigna ejercicios a tus pacientes.</p>
+      <h1 class="text-4xl font-bold m-0" style="color: #064e3b;">Banco de Ejercicios</h1>
+      <p class="text-600 m-0 font-medium">Prescripción por Zonas de Tratamiento - ACTIVA</p>
     </div>
     <span class="p-input-icon-left w-full lg:w-20rem">
-      <i class="pi pi-search text-color-secondary"></i>
-      <input pInputText type="text" placeholder="Buscar por nombre, músculo..." class="w-full border-round-3xl py-2 border-1 surface-border shadow-none" style="padding-left: 2.5rem; padding-right: 1rem;">
+      <i class="pi pi-search text-teal-600"></i>
+      <input pInputText type="text" [(ngModel)]="searchTerm" (input)="onSearch()" 
+             placeholder="Buscar ejercicio..." class="w-full border-round-3xl py-2 px-5 shadow-none border-1 surface-border">
     </span>
   </div>
 
-  <div class="flex gap-3 mb-4 overflow-x-auto pb-2 border-bottom-1 surface-border" style="width: 100%;">
-    <button class="flex-shrink-0 p-button p-component bg-white text-color border-1 surface-border border-round-md hover:surface-hover px-4 py-2 font-medium transition-colors shadow-none">Fuerza</button>
-    <button class="flex-shrink-0 p-button p-component bg-transparent text-color border-none border-round-md hover:surface-hover px-4 py-2 font-medium transition-colors shadow-none">Estiramientos</button>
-    <button class="flex-shrink-0 p-button p-component bg-transparent text-color border-none border-round-md hover:surface-hover px-4 py-2 font-medium transition-colors shadow-none">Propiocepción</button>
+  <div class="flex gap-3 mb-6 overflow-x-auto pb-2 custom-scrollbar">
+    <button *ngFor="let cat of categories" 
+            (click)="filterByZone(cat)"
+            [class.active]="selectedCategory === cat.label"
+            class="category-btn shadow-1">
+      {{ cat.label }}
+    </button>
   </div>
 
-  <div class="flex gap-3 mb-6 overflow-x-auto pb-2" style="width: 100%;">
-    <button class="flex-shrink-0 p-button p-component border-none border-round-3xl px-4 py-2 font-medium transition-colors shadow-none" style="background-color: var(--text-color); color: var(--surface-ground);">Todo</button>
-    <button class="flex-shrink-0 p-button p-component bg-white text-color border-1 surface-border border-round-3xl hover:surface-hover px-4 py-2 font-medium transition-colors shadow-none">Cervical</button>
-    <button class="flex-shrink-0 p-button p-component bg-white text-color border-1 surface-border border-round-3xl hover:surface-hover px-4 py-2 font-medium transition-colors shadow-none">Hombro</button>
-    <button class="flex-shrink-0 p-button p-component bg-white text-color border-1 surface-border border-round-3xl hover:surface-hover px-4 py-2 font-medium transition-colors shadow-none">Lumbar</button>
-    <button class="flex-shrink-0 p-button p-component bg-white text-color border-1 surface-border border-round-3xl hover:surface-hover px-4 py-2 font-medium transition-colors shadow-none">Rodilla</button>
-  </div>
+  <div class="grid" *ngIf="!loading">
+    <div class="col-12 md:col-6 lg:col-4 xl:col-3 p-3" *ngFor="let exercise of filteredExercises">
+      <div class="exercise-card-v2 border-1 surface-border bg-white border-round-2xl overflow-hidden shadow-1">
+        
+        <div class="image-container-v2 relative">
+          <img [src]="exercise.videoUrl || placeholderImg" (error)="$any($event.target).src = placeholderImg">
+          <span class="absolute top-0 right-0 m-2 bg-white-alpha-90 text-teal-800 text-xs font-bold px-2 py-1 border-round-lg shadow-1 uppercase">
+            {{ exercise.bodyZone }}
+          </span>
+        </div>
 
-  <div class="grid">
-    
-    <div class="col-12 md:col-6 lg:col-4 xl:col-3 p-3">
-      <div class="bg-white border-round-2xl shadow-1 hover:shadow-2 transition-all duration-300 overflow-hidden flex flex-column h-full border-1 surface-border">
-        <div class="relative h-12rem bg-gray-200 flex align-items-center justify-content-center">
-          <div class="absolute top-0 right-0 m-3 bg-white text-color font-bold text-xs px-2 py-1 border-round-xl shadow-1">2:30 min</div>
-          <div class="bg-white-alpha-80 border-circle flex align-items-center justify-content-center shadow-2 cursor-pointer hover:bg-white transition-colors" style="width: 3rem; height: 3rem;">
-            <i class="pi pi-play text-xl text-color"></i>
-          </div>
-        </div>
-        <div class="p-4 flex-1 flex flex-column"> <div class="flex justify-content-between align-items-center mb-3">
-            <span class="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-1 border-round-md tracking-wide">HOMBRO</span>
-            <span class="text-xs font-bold text-orange-500 flex align-items-center gap-1">
-              <i class="pi pi-signal" style="transform: scaleX(-1);"></i> Medio
-            </span>
-          </div>
-          <h3 class="m-0 mb-3 text-lg text-color font-bold line-height-3">Rotación Externa con Banda</h3>
-          <p class="m-0 text-sm text-color-secondary line-height-3 flex-1">Ejercicio de fortalecimiento para el manguito rotador.</p>
-          <p-button label="Asignar" icon="pi pi-plus-circle" styleClass="w-full mt-4 bg-activa-primary border-none hover:bg-activa-primary-hover border-round-xl font-medium"></p-button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-12 md:col-6 lg:col-4 xl:col-3 p-3">
-      <div class="bg-white border-round-2xl shadow-1 hover:shadow-2 transition-all duration-300 overflow-hidden flex flex-column h-full border-1 surface-border">
-        <div class="relative h-12rem bg-gray-200 flex align-items-center justify-content-center">
-          <div class="absolute top-0 right-0 m-3 bg-white text-color font-bold text-xs px-2 py-1 border-round-xl shadow-1">1:45 min</div>
-          <div class="bg-white-alpha-80 border-circle flex align-items-center justify-content-center shadow-2 cursor-pointer hover:bg-white transition-colors" style="width: 3rem; height: 3rem;">
-            <i class="pi pi-play text-xl text-color"></i>
-          </div>
-        </div>
         <div class="p-4 flex-1 flex flex-column">
-          <div class="flex justify-content-between align-items-center mb-3">
-            <span class="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 border-round-md tracking-wide">RODILLA</span>
-            <span class="text-xs font-bold text-green-500 flex align-items-center gap-1">
-              <i class="pi pi-signal" style="transform: scaleX(-1);"></i> Fácil
-            </span>
-          </div>
-          <h3 class="m-0 mb-3 text-lg text-color font-bold line-height-3">Sentadilla Asistida</h3>
+          <h3 class="m-0 mb-2 text-lg font-bold text-900">{{ exercise.name }}</h3>
+          <p class="m-0 text-sm text-600 description-text-v2 flex-1">{{ exercise.description }}</p>
           
-          <p class="m-0 text-sm text-color-secondary line-height-3 flex-1">Ideal para rehabilitación temprana de rodilla.</p>
-          <p-button label="Asignar" icon="pi pi-plus-circle" styleClass="w-full mt-4 bg-activa-primary border-none hover:bg-activa-primary-hover border-round-xl font-medium"></p-button>
+          <div class="mt-4">
+            <p-button label="Asignar" icon="pi pi-user-plus" (onClick)="openAssignModal(exercise)"
+                      styleClass="w-full btn-assign-teal border-none border-round-xl font-bold py-2 shadow-2"></p-button>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="col-12 md:col-6 lg:col-4 xl:col-3 p-3">
-      <div class="bg-white border-round-2xl shadow-1 hover:shadow-2 transition-all duration-300 overflow-hidden flex flex-column h-full border-1 surface-border">
-        <div class="relative h-12rem bg-gray-200 flex align-items-center justify-content-center">
-          <div class="absolute top-0 left-0 m-3 bg-orange-500 text-white font-bold text-xs px-2 py-1 border-round-xl shadow-1">Nuevo</div>
-          <div class="bg-white-alpha-80 border-circle flex align-items-center justify-content-center shadow-2 cursor-pointer hover:bg-white transition-colors" style="width: 3rem; height: 3rem;">
-            <i class="pi pi-play text-xl text-color"></i>
-          </div>
-        </div>
-        <div class="p-4 flex-1 flex flex-column">
-          <div class="flex justify-content-between align-items-center mb-3">
-            <span class="text-xs font-bold text-purple-500 bg-purple-50 px-2 py-1 border-round-md tracking-wide">LUMBAR</span>
-            <span class="text-xs font-bold text-orange-500 flex align-items-center gap-1">
-              <i class="pi pi-signal" style="transform: scaleX(-1);"></i> Medio
-            </span>
-          </div>
-          <h3 class="m-0 mb-3 text-lg text-color font-bold line-height-3">Estiramiento Gato-Vaca</h3>
-          <p class="m-0 text-sm text-color-secondary line-height-3 flex-1">Movilización de columna para tensión lumbar.</p>
-          <p-button label="Asignar" icon="pi pi-plus-circle" styleClass="w-full mt-4 bg-activa-primary border-none hover:bg-activa-primary-hover border-round-xl font-medium"></p-button>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
+
+<p-dialog header="Asignar Ejercicio" [(visible)]="showAssignModal" [modal]="true" [draggable]="false" [style]="{width: '100%', maxWidth: '420px'}">
+  <div class="flex flex-column gap-3 mt-3">
+    <p-listbox [options]="patients" [(ngModel)]="selectedPatient" optionLabel="firstName" 
+               [filter]="true" [listStyle]="{'max-height': '200px'}" placeholder="Buscar paciente...">
+      <ng-template let-patient pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <div class="w-2rem h-2rem border-circle bg-teal-100 flex align-items-center justify-content-center">
+            <i class="pi pi-user text-teal-600 text-xs"></i>
+          </div>
+          <span class="font-medium text-700">{{ patient.firstName }} {{ patient.lastNameP }}</span>
+        </div>
+      </ng-template>
+    </p-listbox>
+    <div class="flex justify-content-end gap-2 mt-2">
+      <p-button label="Cancelar" styleClass="p-button-text" (onClick)="showAssignModal = false"></p-button>
+      <p-button label="Confirmar" [disabled]="!selectedPatient" styleClass="btn-assign-teal px-4" (onClick)="confirmAssignment()"></p-button>
+    </div>
+  </div>
+</p-dialog>

@@ -1,10 +1,21 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Exercise } from '../../../core/exercises/domain/exercise.model';
+import { ExerciseUseCase } from '../../../core/exercises/application/exercise.use-case';
+
+@Component({
+  selector: 'app-listado-ejercicios',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './listado-ejercicios.html',
+  styleUrls: ['./listado-ejercicios.scss']
+})
 export class ListadoEjercicios implements OnInit {
-  exercises: Exercise[] = [];         // Datos originales del Back
-  filteredExercises: Exercise[] = []; // Datos que se muestran en pantalla
-  searchTerm: string = '';            // Término de búsqueda
-  
+  exercises: Exercise[] = [];         
+  filteredExercises: Exercise[] = []; 
+  searchTerm: string = '';            
   loading = false;
-  // ... (tus variables de paginación)
 
   constructor(private exerciseUseCase: ExerciseUseCase) {}
 
@@ -14,36 +25,29 @@ export class ListadoEjercicios implements OnInit {
 
   loadExercises(): void {
     this.loading = true;
-    // ... (tu lógica de offset actual)
-
-    this.exerciseUseCase.listExercises(this.pageSize, offset).subscribe({
-      next: (result: any) => {
+    this.exerciseUseCase.listExercises(1, 10).subscribe({
+      next: (result) => {
         this.exercises = result.rows; 
-        this.filteredExercises = result.rows; // Al cargar, ambos son iguales
-        this.totalCount = result.count;
-        this.totalPages = Math.ceil(this.totalCount / this.pageSize);
+        this.filteredExercises = result.rows;
         this.loading = false;
-        
-        // Si hay un término de búsqueda previo, aplicarlo a los nuevos datos
-        if (this.searchTerm) this.onSearch();
       },
-      // ... (error handling)
+      error: () => this.loading = false
     });
   }
 
-  // FUNCIÓN DE FILTRADO
   onSearch(): void {
-    const term = this.searchTerm.toLowerCase().trim();
-    
+    const term = this.normalizeText(this.searchTerm);
     if (!term) {
       this.filteredExercises = [...this.exercises];
       return;
     }
-
     this.filteredExercises = this.exercises.filter(ex => 
-      (ex.name?.toLowerCase().includes(term)) || 
-      (ex.bodyZone?.toLowerCase().includes(term)) ||
-      (ex.description?.toLowerCase().includes(term))
+      this.normalizeText(ex.name).includes(term) || 
+      this.normalizeText(ex.bodyZone || '').includes(term)
     );
+  }
+
+  private normalizeText(text: string): string {
+    return text ? text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim() : '';
   }
 }
