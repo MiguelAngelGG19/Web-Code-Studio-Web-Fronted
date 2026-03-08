@@ -1,11 +1,33 @@
 /* Ocultar flechas de incremento/decremento en Chrome, Safari, Edge y Opera */
-::ng-deep .no-spinners::-webkit-outer-spin-button,
-::ng-deep .no-spinners::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+/* 1. Soporte para el hover de la tarjeta */
+.hover\:scale-101 {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    &:hover {
+      transform: scale(1.015);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06) !important;
+    }
+}
+  
+/* 2. Limpieza de flechas en inputs numericos */
+.no-spinners {
+    -moz-appearance: textfield;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 }
 
-/* Ocultar flechas en Firefox */
-::ng-deep .no-spinners {
-  -moz-appearance: textfield;
+/* 3. Colores de Identidad Activa */
+:host ::ng-deep {
+    /* Define aqui tus colores si no son globales */
+    .bg-activa-primary { background-color: #00A99D !important; } 
+    .bg-activa-primary-light { background-color: #E6F6F5 !important; }
+    .text-activa-primary { color: #00A99D !important; }
+    .hover\:bg-activa-primary-hover:hover { background-color: #008E84 !important; }
+
+    /* Ajuste de Dialog */
+    .p-dialog .p-dialog-header {
+        padding: 1.5rem 1.5rem 0 1.5rem;
+    }
 }

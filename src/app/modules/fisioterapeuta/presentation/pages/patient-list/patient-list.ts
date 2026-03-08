@@ -3,44 +3,52 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+// PrimeNG Modules
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { PatientHttpRepository } from '../../../../../core/patient/infraestructure/patient-http.repository';
-import { Patient } from '../../../../../core/patient/domain/patient.model';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
-// 1. IMPORTAMOS EL KEYFILTER
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { MessageService } from 'primeng/api';
+
+// Arquitectura Core (Asegúrate de que estas rutas coincidan con tu proyecto)
+import { PatientHttpRepository } from '../../../../../core/patient/infraestructure/patient-http.repository';
 import { PatientUseCase } from '../../../../../core/patient/application/patient.use-case';
+import { Patient } from '../../../../../core/patient/domain/patient.model';
 
 @Component({
   selector: 'app-patient-list',
   standalone: true,
   imports: [
-    CommonModule, RouterModule, FormsModule,
-    ButtonModule, InputTextModule, DialogModule,
-    ToastModule, KeyFilterModule // 2. LO AGREGAMOS AQUÍ
+    CommonModule, 
+    RouterModule, 
+    FormsModule,
+    ButtonModule, 
+    InputTextModule, 
+    DialogModule,
+    ToastModule, 
+    KeyFilterModule
   ],
   providers: [MessageService],
   templateUrl: './patient-list.html',
-  styleUrl: './patient-list.scss' // Asegúrate de tener esta línea para los estilos
+  styleUrl: './patient-list.scss'
 })
 export class PatientListComponent implements OnInit {
-  // Tu arreglo mantiene el mismo formato
+  // Variables principales conectadas al HTML
   patients: any[] = [];
   displayEditModal: boolean = false;
   pacienteEditando: any = {};
 
-  // 3. AGREGAMOS TU EXPRESIÓN REGULAR PARA NOMBRES
+  // Expresión regular para validar nombres (solo letras y espacios)
   regexLetras: RegExp = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
 
+  // Inyección de dependencias clásica
   constructor(
     private messageService: MessageService,
     private patientUseCase: PatientUseCase
   ) { }
 
-  // Inyectamos tu servicio real
+  // Inyección de dependencias moderna (Angular 14+)
   private patientRepo = inject(PatientHttpRepository);
 
   ngOnInit() {
@@ -50,11 +58,8 @@ export class PatientListComponent implements OnInit {
   cargarPacientesReales() {
     this.patientRepo.getAllPatients().subscribe({
       next: (datosReales: Patient[]) => {
-        // Mapeamos (transformamos) la información del backend a las variables que usa tu HTML
+        // Transformamos los datos del backend para la vista
         this.patients = datosReales.map((dbPatient, index) => {
-
-          // Un pequeño arreglo para alternar tus fotos y colores de estado 
-          // dependiendo de la posición del paciente en la lista
           const avatares = [
             'https://i.pravatar.cc/150?img=47',
             'https://i.pravatar.cc/150?img=11',
@@ -64,16 +69,19 @@ export class PatientListComponent implements OnInit {
 
           return {
             id: dbPatient.idPaciente,
-
-            // 1. DATOS REALES DE TU API
-            // Unimos los nombres del backend en la variable "name" que espera tu HTML
             name: `${dbPatient.first_name} ${dbPatient.last_name_p} ${dbPatient.last_name_m || ''}`.trim(),
-
-            // Usamos la variable "phone" de tu HTML, pero le metemos el email de la BD 
-            // (o un texto por defecto si no tiene)
             phone: dbPatient.email || 'Sin información de contacto',
+            
+            // Datos originales para el modal de edición
+            first_name: dbPatient.first_name,
+            last_name_p: dbPatient.last_name_p,
+            last_name_m: dbPatient.last_name_m,
+            email: dbPatient.email,
+            birth_year: dbPatient.birth_year,
+            height: dbPatient.height,
+            weight: dbPatient.weight,
 
-            // 2. DATOS DE DISEÑO (Para que tus tarjetas se sigan viendo geniales)
+            // Datos de diseño (Mockeados por ahora para mantener la UI)
             tag: 'NUEVA',
             tagClass: 'bg-green-100 text-green-600',
             dateIcon: 'pi pi-calendar',
@@ -82,21 +90,19 @@ export class PatientListComponent implements OnInit {
             motivoColor: 'text-color',
             diagnostico: 'Pendiente',
             diagnosticoColor: 'text-activa-primary',
-            notaSOAP: 'Paciente ingresado desde el sistema central. Pendiente de evaluación...',
-
-            // Asignamos una imagen y un color diferente usando el índice
+            notaSOAP: 'Paciente ingresado desde el sistema central...',
             avatar: avatares[index % 3],
             statusDot: coloresEstado[index % 3]
           };
         });
       },
       error: (err: any) => {
-        console.error('Hubo un error al conectar con la base de datos', err);
+        console.error('Hubo un error al conectar con la base de datos, cargando datos de prueba:', err);
+        // MOCK DATA: Respaldo visual si el backend falla
         this.patients = [
           {
             id: 20,
             name: 'Sarah Jenkins Smith',
-            // Campos reales de tu BD para el modal
             first_name: 'Sarah',
             last_name_p: 'Jenkins',
             last_name_m: "Smith",
@@ -104,7 +110,6 @@ export class PatientListComponent implements OnInit {
             birth_year: 1990,
             height: 1.65,
             weight: 62,
-            // Datos visuales de tu tarjeta
             phone: '+1 (555) 019-2834',
             tag: 'POST-OPERATORIO',
             tagClass: 'bg-orange-100 text-orange-500',
@@ -114,7 +119,7 @@ export class PatientListComponent implements OnInit {
             motivoColor: 'text-red-500',
             diagnostico: 'Manguito Rotador',
             diagnosticoColor: 'text-activa-primary',
-            notaSOAP: 'Paciente reporta dolor reducido (3/10) durante movimientos por encima de l...',
+            notaSOAP: 'Paciente reporta dolor reducido (3/10) durante movimientos...',
             avatar: 'https://i.pravatar.cc/150?img=47',
             statusDot: 'bg-green-500'
           },
@@ -135,9 +140,9 @@ export class PatientListComponent implements OnInit {
             dateText: 'Visto por última vez: hace 2 días',
             motivo: 'Inestabilidad...',
             motivoColor: 'text-color',
-            diagnostico: 'Rehabilitació...',
+            diagnostico: 'Rehabilitación',
             diagnosticoColor: 'text-activa-primary',
-            notaSOAP: 'La hinchazón ha disminuido significativamente. Comenzó ejercici...',
+            notaSOAP: 'La hinchazón ha disminuido significativamente...',
             avatar: 'https://i.pravatar.cc/150?img=11',
             statusDot: 'bg-gray-400'
           },
@@ -160,18 +165,19 @@ export class PatientListComponent implements OnInit {
             motivoColor: 'text-color',
             diagnostico: 'Distensión L...',
             diagnosticoColor: 'text-activa-primary',
-            notaSOAP: 'Dolor agudo después de levantar objeto pesado. Flexión hacia adelant...',
+            notaSOAP: 'Dolor agudo después de levantar objeto pesado...',
             avatar: 'https://i.pravatar.cc/150?img=5',
             statusDot: 'bg-green-500'
           }
         ];
       }
-    })
+    });
   }
 
-  // Funciones del Modal
+  // --- MÉTODOS DEL MODAL ---
+
   abrirModalEditar(paciente: any) {
-    this.pacienteEditando = { ...paciente }; // Clonamos los datos para no afectar la tarjeta original hasta guardar
+    this.pacienteEditando = { ...paciente }; 
     this.displayEditModal = true;
   }
 
@@ -180,59 +186,41 @@ export class PatientListComponent implements OnInit {
   }
 
   guardarCambios() {
-    // Limpiamos alertas previas para no hacer spam
     this.messageService.clear();
-
     const p = this.pacienteEditando;
 
-    // 1. Validación de campos vacíos
+    // 1. Validaciones
     if (!p.first_name || !p.last_name_p || !p.email || !p.birth_year || !p.height || !p.weight) {
       this.messageService.add({ severity: 'warn', summary: 'Campos incompletos', detail: 'Por favor, llena todos los campos obligatorios.' });
-      return; // Detiene la ejecución aquí
+      return; 
     }
 
-    // 2. Validación de formato de correo
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(p.email)) {
       this.messageService.add({ severity: 'warn', summary: 'Correo inválido', detail: 'Por favor, proporciona un correo electrónico válido.' });
       return;
     }
 
-    // 3. Validación estricta del Año de Nacimiento (Ni del futuro, ni vampiros de 1800)
     const currentYear = new Date().getFullYear();
     const birthYearNum = Number(p.birth_year);
     if (birthYearNum < 1900 || birthYearNum > currentYear) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Año incorrecto',
-        detail: `El año de nacimiento debe estar entre 1900 y ${currentYear}.`
-      });
+      this.messageService.add({ severity: 'warn', summary: 'Año incorrecto', detail: `El año de nacimiento debe estar entre 1900 y ${currentYear}.` });
       return;
     }
 
-    // 4. Validación lógica de Estatura (El punto decimal)
     const alturaNum = Number(p.height);
     if (alturaNum < 0.40 || alturaNum > 2.50) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Revisa la estatura',
-        detail: 'La estatura debe estar en metros (ej. 1.75). Asegúrate de usar el punto decimal.'
-      });
+      this.messageService.add({ severity: 'warn', summary: 'Revisa la estatura', detail: 'La estatura debe estar en metros (ej. 1.75). Asegúrate de usar el punto decimal.' });
       return;
     }
 
-    // 5. Validación lógica de Peso (Aceptamos pacientes bariátricos, solo evitamos errores de teclado catastróficos)
     const pesoNum = Number(p.weight);
     if (pesoNum <= 0 || pesoNum > 700) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Revisa el peso',
-        detail: 'El peso debe ser mayor a 0 y menor a 700 Kg. Asegúrate de usar el punto decimal correctamente.'
-      });
+      this.messageService.add({ severity: 'warn', summary: 'Revisa el peso', detail: 'El peso debe ser mayor a 0 y menor a 700 Kg.' });
       return;
     }
 
-    // Si todo está perfecto, preparamos el paquete para el backend
+    // 2. Preparar Payload para Backend
     const payloadParaBackend = {
       firstName: p.first_name,
       lastNameP: p.last_name_p,
@@ -243,17 +231,17 @@ export class PatientListComponent implements OnInit {
       weight: pesoNum
     };
 
-    console.log(`📦 Enviando PUT al backend:`, payloadParaBackend);
+    console.log(`Enviando PUT al backend:`, payloadParaBackend);
 
+    // 3. Ejecutar Caso de Uso
     this.patientUseCase.executeUpdate(p.id, payloadParaBackend as any).subscribe({
       next: (respuesta: any) => {
         this.messageService.add({ severity: 'success', summary: '¡Actualizado!', detail: 'Paciente modificado correctamente.' });
 
-        // Reconstruimos el nombre visualmente
+        // Actualizar visualmente la tarjeta
         const apellidoM = p.last_name_m ? ` ${p.last_name_m}` : '';
         this.pacienteEditando.name = `${p.first_name} ${p.last_name_p}${apellidoM}`;
 
-        // Actualizamos la tarjeta falsa
         const index = this.patients.findIndex(paciente => paciente.id === p.id);
         if (index !== -1) {
           this.patients[index] = { ...this.patients[index], ...this.pacienteEditando };
@@ -262,16 +250,15 @@ export class PatientListComponent implements OnInit {
         this.displayEditModal = false;
       },
       error: (err: any) => {
-        console.error('❌ Error al editar:', err);
-        // Si el backend sigue enojado por algo que no vimos, intentamos mostrar su mensaje exacto
+        console.error('Error al editar:', err);
         const mensajeBackend = err.error?.message || err.error?.error || 'Ocurrió un problema al guardar en el servidor.';
         this.messageService.add({ severity: 'error', summary: 'Error del Servidor', detail: mensajeBackend });
       }
     });
   }
+
   verDetallePaciente(id: number) {
     console.log('Navegando al expediente del paciente con ID:', id);
-    // Nota para el futuro: Aquí usaremos el Router para ir a la pantalla del expediente
-    // ej. this.router.navigate(['/dashboard/expediente', id]);
+    // this.router.navigate(['/dashboard/expediente', id]);
   }
 }

@@ -1,7 +1,8 @@
 <p-toast></p-toast>
 
-<div class="fadein">
+<div class="fadein p-4 md:p-6 surface-ground min-h-screen">
   
+  <!-- ENCABEZADO Y BOTONES PRINCIPALES -->
   <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center mb-4 gap-4">
     <div>
       <h1 class="text-3xl font-bold text-color m-0 mb-2">Agenda de Pacientes</h1>
@@ -9,11 +10,12 @@
     </div>
     <div class="flex gap-3">
       <p-button label="Exportar" icon="pi pi-external-link" styleClass="bg-white text-color border-1 surface-border hover:surface-hover border-round-xl px-4 py-2 font-bold shadow-none"></p-button>
-      <p-button label="Agregar Nuevo Paciente" icon="pi pi-plus" routerLink="/dashboard/nuevo-paciente" styleClass="bg-activa-primary border-none shadow-1 hover:bg-activa-primary-hover border-round-xl px-4 py-2 font-bold"></p-button>
+      <p-button label="Agregar Nuevo Paciente" icon="pi pi-plus" routerLink="/dashboard/nuevo-paciente" styleClass="bg-activa-primary border-none shadow-1 hover:bg-activa-primary-hover border-round-xl px-4 py-2 font-bold text-white"></p-button>
     </div>
   </div>
 
- <div class="bg-white border-round-2xl border-1 surface-border p-2 mb-5 flex flex-column xl:flex-row gap-2 align-items-center shadow-none">
+  <!-- BARRA DE BÚSQUEDA Y FILTROS -->
+  <div class="bg-white border-round-2xl border-1 surface-border p-2 mb-5 flex flex-column xl:flex-row gap-2 align-items-center shadow-none">
     
     <span class="p-input-icon-left w-full xl:w-30rem">
       <i class="pi pi-search text-color-secondary ml-3"></i>
@@ -23,23 +25,26 @@
     <div class="border-left-1 surface-border hidden xl:block" style="height: 2rem;"></div>
     
     <div class="flex gap-2 overflow-x-auto w-full pb-2 xl:pb-0 px-3 align-items-center">
-      
+      <!-- Muestra el total de pacientes real del arreglo de tu Typescript -->
       <button class="flex-shrink-0 p-button p-component bg-activa-primary-light text-activa-primary border-none border-round-xl px-4 py-2 font-bold transition-colors">
-        Todos los Pacientes (3)
+        Todos los Pacientes ({{ patients.length }})
       </button>
       
       <button class="flex-shrink-0 p-button p-component bg-transparent text-color border-none hover:surface-hover border-round-xl px-4 py-2 font-bold transition-colors">
         Nueva Consulta
       </button>
-
     </div>
   </div>
 
+  <!-- GRID DE TARJETAS -->
   <div class="grid formgrid">
     
+    <!-- Iteración de pacientes -->
     <div *ngFor="let patient of patients" class="col-12 md:col-6 xl:col-4 mb-4 p-2">
+      <!-- Tarjeta Principal -->
       <div (click)="verDetallePaciente(patient.id)" class="bg-white border-round-2xl border-1 surface-border p-4 shadow-none flex flex-column h-full hover:shadow-2 hover:scale-101 transition-all duration-300 cursor-pointer">
         
+        <!-- Header: Avatar y Nombre -->
         <div class="flex gap-3 mb-4 align-items-center">
           <div class="relative flex-shrink-0">
             <img [src]="patient.avatar" class="border-circle w-4rem h-4rem object-cover shadow-1">
@@ -51,21 +56,23 @@
           </div>
         </div>
 
+        <!-- Estadísticas (Año, Talla, Peso) con validación por si vienen vacíos -->
         <div class="flex justify-content-between mb-4 gap-2 bg-gray-50 border-round-xl p-3 border-1 surface-border">
           <div class="flex flex-column align-items-center flex-1">
             <span class="text-xs font-bold text-color-secondary mb-1 uppercase tracking-wide">Año Nac.</span>
-            <span class="font-bold text-sm text-color">{{patient.birth_year}}</span>
+            <span class="font-bold text-sm text-color">{{patient.birth_year || '--'}}</span>
           </div>
           <div class="flex flex-column align-items-center flex-1 border-left-1 border-right-1 surface-border px-2">
             <span class="text-xs font-bold text-color-secondary mb-1 uppercase tracking-wide">Estatura (m)</span>
-            <span class="font-bold text-sm text-color">{{patient.height}}</span>
+            <span class="font-bold text-sm text-color">{{patient.height || '--'}}</span>
           </div>
           <div class="flex flex-column align-items-center flex-1">
             <span class="text-xs font-bold text-color-secondary mb-1 uppercase tracking-wide">Peso (Kg)</span>
-            <span class="font-bold text-sm text-color">{{patient.weight}}</span>
+            <span class="font-bold text-sm text-color">{{patient.weight || '--'}}</span>
           </div>
         </div>
 
+        <!-- Botones inferiores -->
         <div class="flex gap-2 mt-auto pt-3 border-top-1 surface-border" (click)="$event.stopPropagation()">
           <p-button icon="pi pi-trash" styleClass="bg-gray-100 text-color-secondary border-none hover:surface-hover border-round-lg px-3 py-2 transition-colors shadow-none"></p-button>
           <p-button label="Editar Administrativo" (onClick)="abrirModalEditar(patient)" styleClass="bg-white text-color border-1 surface-border hover:surface-hover border-round-lg flex-1 font-bold py-2 shadow-none"></p-button>
@@ -76,6 +83,7 @@
 
   </div>
 
+  <!-- MODAL DE EDICIÓN -->
   <p-dialog header="Editar Datos Personales" 
             [(visible)]="displayEditModal" 
             [modal]="true" 
@@ -85,10 +93,11 @@
             styleClass="border-round-2xl overflow-hidden shadow-4">
     
     <div class="pt-4 pb-2 px-2">
+      <!-- Icono/Avatar del modal -->
       <div class="flex flex-column align-items-center mb-5">
         <div class="relative">
           <div class="bg-activa-primary text-white border-circle flex align-items-center justify-content-center font-bold text-3xl shadow-2" style="width: 80px; height: 80px;">
-            {{ pacienteEditando.first_name?.charAt(0) || '' }}
+            {{ pacienteEditando.first_name?.charAt(0) || 'P' }}
           </div>
           <div class="absolute bottom-0 right-0 bg-activa-primary text-white border-circle flex align-items-center justify-content-center border-2 border-white cursor-pointer hover:bg-activa-primary-hover transition-colors" style="width: 28px; height: 28px; transform: translate(10%, 10%);">
             <i class="pi pi-pencil text-sm"></i>
@@ -96,56 +105,49 @@
         </div>
       </div>
 
+      <!-- Formulario enlazado -->
       <div class="grid formgrid p-fluid">
         <div class="col-12 md:col-4 mb-3">
           <label class="text-sm font-medium text-color-secondary mb-1 block">Nombre(s)</label>
-          <input pInputText [(ngModel)]="pacienteEditando.first_name" [pKeyFilter]="regexLetras" (focus)="$event.target.select()" class="p-2 border-round-md">
+          <input pInputText [(ngModel)]="pacienteEditando.first_name" [pKeyFilter]="regexLetras" class="p-2 border-round-md">
         </div>
         
         <div class="col-12 md:col-4 mb-3">
           <label class="text-sm font-medium text-color-secondary mb-1 block">Apellido Paterno</label>
-          <input pInputText [(ngModel)]="pacienteEditando.last_name_p" [pKeyFilter]="regexLetras" (focus)="$event.target.select()" class="p-2 border-round-md">
+          <input pInputText [(ngModel)]="pacienteEditando.last_name_p" [pKeyFilter]="regexLetras" class="p-2 border-round-md">
         </div>
 
         <div class="col-12 md:col-4 mb-3">
           <label class="text-sm font-medium text-color-secondary mb-1 block">Apellido Materno</label>
-          <input pInputText [(ngModel)]="pacienteEditando.last_name_m" [pKeyFilter]="regexLetras" (focus)="$event.target.select()" class="p-2 border-round-md">
+          <input pInputText [(ngModel)]="pacienteEditando.last_name_m" [pKeyFilter]="regexLetras" class="p-2 border-round-md">
         </div>
 
         <div class="col-12 mb-3">
           <label class="text-sm font-medium text-color-secondary mb-1 block">Correo Electrónico</label>
-          <span class="p-input-icon-left w-full">
-            <i class="pi pi-envelope text-color-secondary"></i>
-            <input pInputText type="email" [(ngModel)]="pacienteEditando.email" (focus)="$event.target.select()" class="p-2 border-round-md pl-5">
-          </span>
+          <input pInputText type="email" [(ngModel)]="pacienteEditando.email" class="p-2 border-round-md">
         </div>
 
-       <div class="col-12 md:col-4 mb-3">
-          <label class="text-sm font-medium text-color-secondary mb-1 block">Año de Nacimiento</label>
-          <input pInputText 
-                 type="number" 
-                 [(ngModel)]="pacienteEditando.birth_year" 
-                 (focus)="$event.target.select()" 
-                 oninput="if(this.value.length > 4) this.value = this.value.slice(0,4);"
-                 class="p-2 border-round-md no-spinners">
+        <div class="col-12 md:col-4 mb-3">
+          <label class="text-sm font-medium text-color-secondary mb-1 block">Año Nacimiento</label>
+          <input pInputText type="number" [(ngModel)]="pacienteEditando.birth_year" class="p-2 border-round-md no-spinners">
         </div>
 
         <div class="col-12 md:col-4 mb-3">
           <label class="text-sm font-medium text-color-secondary mb-1 block">Estatura (m)</label>
-          <input pInputText type="number" step="0.01" [(ngModel)]="pacienteEditando.height" (focus)="$event.target.select()" class="p-2 border-round-md no-spinners">
+          <input pInputText type="number" step="0.01" [(ngModel)]="pacienteEditando.height" class="p-2 border-round-md no-spinners">
         </div>
 
         <div class="col-12 md:col-4 mb-3">
           <label class="text-sm font-medium text-color-secondary mb-1 block">Peso (Kg)</label>
-          <input pInputText type="number" step="0.1" [(ngModel)]="pacienteEditando.weight" (focus)="$event.target.select()" class="p-2 border-round-md no-spinners">
+          <input pInputText type="number" step="0.1" [(ngModel)]="pacienteEditando.weight" class="p-2 border-round-md no-spinners">
         </div>
       </div>
     </div>
 
     <ng-template pTemplate="footer">
       <div class="flex justify-content-between w-full pt-3 border-top-1 surface-border">
-        <p-button label="Cancelar" icon="pi pi-times" (onClick)="cerrarModal()" styleClass="p-button-text text-color-secondary hover:surface-hover"></p-button>
-        <p-button label="Guardar Cambios" icon="pi pi-save" (onClick)="guardarCambios()" styleClass="bg-activa-primary border-none hover:bg-activa-primary-hover border-round-md px-4"></p-button>
+        <p-button label="Cancelar" icon="pi pi-times" (onClick)="cerrarModal()" styleClass="p-button-text text-color-secondary"></p-button>
+        <p-button label="Guardar Cambios" icon="pi pi-save" (onClick)="guardarCambios()" styleClass="bg-activa-primary border-none text-white px-4"></p-button>
       </div>
     </ng-template>
 
