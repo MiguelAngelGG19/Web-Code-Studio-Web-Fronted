@@ -28,7 +28,7 @@
   </div>
 
   <div class="grid" *ngIf="!loading">
-    <div class="col-12 md:col-6 lg:col-4 xl:col-3 p-3" *ngFor="let exercise of filteredExercises">
+    <div class="col-12 md:col-6 lg:col-4 " *ngFor="let exercise of filteredExercises">
       <div class="exercise-card-v2 border-1 surface-border bg-white border-round-2xl overflow-hidden shadow-1">
         <div class="image-container-v2 relative">
           <img [src]="exercise.videoUrl || placeholderImg" (error)="$any($event.target).src = placeholderImg">

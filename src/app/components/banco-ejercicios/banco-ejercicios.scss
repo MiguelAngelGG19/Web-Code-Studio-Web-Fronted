@@ -2,7 +2,7 @@
 $teal-primary: #14b8a6;   // Teal 500
 $teal-dark: #0f766e;      // Teal 700 (Para el presionado)
 $teal-deep: #0d617a;      // Verde oscuro esmeralda
-$surface-hover: #f0fdfa;
+$surface-hover: #d8f3ed;
 
 /* Botones de Categoría */
 .category-btn {
@@ -27,11 +27,12 @@ $surface-hover: #f0fdfa;
     color: white;
     border-color: $teal-deep;
     box-shadow: 0 4px 10px rgba(6, 78, 59, 0.2);
+    
   }
 
   &:active {
     transform: scale(0.94);
-    background-color: #022c22; // Verde casi negro al presionar fuerte
+    background-color: #023a2d; // Verde casi negro al presionar fuerte
   }
 }
 
@@ -39,30 +40,36 @@ $surface-hover: #f0fdfa;
 .exercise-card-v2 {
   display: flex;
   flex-direction: column;
+
   height: 100%;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-
+  padding: 1rem !important;
+  flex-grow: 1;
   &:hover {
-    transform: translateY(-5px);
+    
+    transform: translateY(-8px);
     box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important;
+    
   }
 
   .image-container-v2 {
-    height: 180px;
+    height: 200px;
     overflow: hidden;
+    background: black;
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
-
+ 
   .description-text-v2 {
     display: -webkit-box;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    height: 4.2rem;         
-    line-height: 1.4;
+       
+    line-height: 1.6;
   }
 }
 
