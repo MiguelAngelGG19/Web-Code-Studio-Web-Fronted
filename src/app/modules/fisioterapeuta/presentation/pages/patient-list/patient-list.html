@@ -25,7 +25,7 @@
     <div class="flex gap-2 overflow-x-auto w-full pb-2 xl:pb-0 px-3 align-items-center">
       
       <button class="flex-shrink-0 p-button p-component bg-activa-primary-light text-activa-primary border-none border-round-xl px-4 py-2 font-bold transition-colors">
-        Todos los Pacientes (3)
+        Todos los Pacientes ({{ patients.length }})
       </button>
       
       <button class="flex-shrink-0 p-button p-component bg-transparent text-color border-none hover:surface-hover border-round-xl px-4 py-2 font-bold transition-colors">
@@ -68,7 +68,7 @@
 
         <div class="flex gap-2 mt-auto pt-3 border-top-1 surface-border" (click)="$event.stopPropagation()">
           <p-button icon="pi pi-trash" styleClass="bg-gray-100 text-color-secondary border-none hover:surface-hover border-round-lg px-3 py-2 transition-colors shadow-none"></p-button>
-          <p-button label="Editar Administrativo" (onClick)="abrirModalEditar(patient)" styleClass="bg-white text-color border-1 surface-border hover:surface-hover border-round-lg flex-1 font-bold py-2 shadow-none"></p-button>
+          <p-button label="Editar Paciente" (onClick)="abrirModalEditar(patient)" styleClass="bg-white text-color border-1 surface-border hover:surface-hover border-round-lg flex-1 font-bold py-2 shadow-none"></p-button>
         </div>
         
       </div>
@@ -120,14 +120,16 @@
           </span>
         </div>
 
-       <div class="col-12 md:col-4 mb-3">
+        <div class="col-12 md:col-4 mb-3">
           <label class="text-sm font-medium text-color-secondary mb-1 block">Año de Nacimiento</label>
-          <input pInputText 
-                 type="number" 
-                 [(ngModel)]="pacienteEditando.birth_year" 
+          <input type="text" 
+                 pInputText 
+                 pKeyFilter="int" 
+                 maxlength="4" 
+                 [ngModel]="pacienteEditando.birth_year" 
+                 (ngModelChange)="pacienteEditando.birth_year = $any($event)"
                  (focus)="$event.target.select()" 
-                 oninput="if(this.value.length > 4) this.value = this.value.slice(0,4);"
-                 class="p-2 border-round-md no-spinners">
+                 class="w-full border-round-lg p-2 shadow-none">
         </div>
 
         <div class="col-12 md:col-4 mb-3">
