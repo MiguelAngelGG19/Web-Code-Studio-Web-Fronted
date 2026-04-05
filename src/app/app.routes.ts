@@ -3,62 +3,72 @@ import { Menu } from './components/menu/menu';
 import { BancoEjerciciosComponent } from './components/banco-ejercicios/banco-ejercicios';
 import { PatientListComponent } from './modules/fisioterapeuta/presentation/pages/patient-list/patient-list';
 import { PatientCreateComponent } from './modules/fisioterapeuta/presentation/pages/patient-create/patient-create';
-import { RegistroFisioComponent } from './modules/registro-fisio/registro-fisio'; // <-- Ajusta la ruta a tu estructura real
-import { ExerciseHttpRepository } from './core/exercises/infraestructure/exercise-http.repository';
-import { ExerciseRepository } from './core/exercises/domain/exercise.repository';
-import { ExerciseUseCase } from './core/exercises/application/exercise.use-case';
+import { RegistroFisioComponent } from './modules/fisioterapeuta/presentation/pages/registro-fisio/registro-fisio'; 
+import { AppointmentsComponent } from './modules/fisioterapeuta/presentation/pages/appointments/appointments';
+import { AppointmentCreateComponent } from './modules/fisioterapeuta/presentation/pages/appointment-create/appointment-create';
+import { AppointmentDetailComponent } from './modules/fisioterapeuta/presentation/pages/appointment-detail/appointment-detail';
+import { AppointmentListComponent } from './modules/fisioterapeuta/presentation/pages/appointment-list/appointment-list';
+import { LoginFisioComponent } from './modules/fisioterapeuta/presentation/pages/login-fisio/login-fisio'; 
+import { VerifyDataComponent } from './modules/fisioterapeuta/presentation/pages/verify-data/verify-data'; 
 
-
+// IMPORTAMOS EL CADENERO
+import { authGuard } from './core/auth/application/auth.guard';
 
 export const routes: Routes = [
-  // 1. Dominio Fisioterapeuta (Pantallas de Login/Registro públicas)
-  {
-
-    path: 'fisioterapeuta',
-    loadChildren: () => import('./modules/fisioterapeuta/fisioterapeuta.routes').then(m => m.FISIOTERAPEUTA_ROUTES)
-  },
-  { path: 'registro-fisio', component: RegistroFisioComponent },
-  {path: 'Ejercicios', component: BancoEjerciciosComponent},
   
-{ 
+  // =========================================================
+  // 🟢 RUTAS PÚBLICAS (Cualquiera puede entrar)
+  // =========================================================
+  { path: 'login', component: LoginFisioComponent },
+  { path: 'registro-fisio', component: RegistroFisioComponent },
+
+  // =========================================================
+  // 🔴 RUTAS PRIVADAS (Solo entran con Token JWT)
+  // =========================================================
+  {
+    path: 'fisioterapeuta',
+    loadChildren: () => import('./modules/fisioterapeuta/fisioterapeuta.routes').then(m => m.FISIOTERAPEUTA_ROUTES),
+    canActivate: [authGuard] // Protegemos el módulo lazy load
+  },
+  { 
+    path: 'verificar-datos', 
+    component: VerifyDataComponent,
+    canActivate: [authGuard] // Protegido: Solo fisios registrados suben documentos
+  },
+  { 
+    path: 'Ejercicios', 
+    component: BancoEjerciciosComponent,
+    canActivate: [authGuard] // Protegido
+  },
+  
+  // DASHBOARD PRINCIPAL Y SUS SUB-PANTALLAS
+  { 
     path: 'dashboard', 
     component: Menu, 
+    canActivate: [authGuard], // 🛡️ MAGIA: Al proteger el padre, proteges a todos los hijos automáticamente
     children: [
       { path: 'ejercicios', component: BancoEjerciciosComponent },
       { path: 'pacientes', component: PatientListComponent },
       { path: 'nuevo-paciente', component: PatientCreateComponent },
       
+      // Módulo de Agenda
+      { path: 'citas', component: AppointmentsComponent },
+      { path: 'nueva-cita', component: AppointmentCreateComponent },
+      { path: 'detalle-cita', component: AppointmentDetailComponent },
+      { path: 'historial-citas', component: AppointmentListComponent },
     ]
   },
 
-
-   
-
-
-
-  // 2. Dominio Privado (Aquí irá el Dashboard y Pacientes más adelante)
-  // Lo dejamos comentado hasta que creemos esos componentes
-  /*
-  {
-    path: 'app',
-    loadComponent: () => import('./core/presentation/layout/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
-    children: [
-      { path: 'dashboard', loadComponent: () => import('./features/dashboard/presentation/pages/dashboard.component').then(m => m.DashboardComponent) }
-    ]
-  },
-  */
-
-  // 3. Redirección por defecto al abrir localhost:4200
+  // =========================================================
+  // ⚙️ REDIRECCIONES DE SEGURIDAD
+  // =========================================================
   { 
     path: '', 
-    redirectTo: 'fisioterapeuta/registro', 
+    redirectTo: 'login', 
     pathMatch: 'full' 
   },
-  
-  // 4. Ruta comodín por si el usuario escribe una URL que no existe (Error 404)
   { 
     path: '**', 
-    redirectTo: 'fisioterapeuta/registro' 
+    redirectTo: 'login' 
   }
-  
 ];

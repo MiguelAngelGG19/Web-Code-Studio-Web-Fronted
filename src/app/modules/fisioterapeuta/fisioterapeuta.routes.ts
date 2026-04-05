@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { RegistroComponent } from './presentation/pages/registro/registro';
-import { RegistroFisioComponent } from '../registro-fisio/registro-fisio';
+import { RegistroFisioComponent } from './presentation/pages/registro-fisio/registro-fisio';
 import { CuentaVerificadaComponent } from './presentation/pages/cuenta-verificada/cuenta-verificada';
 
 export const FISIOTERAPEUTA_ROUTES: Routes = [
