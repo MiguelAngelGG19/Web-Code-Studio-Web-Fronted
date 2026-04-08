@@ -170,7 +170,10 @@ export class AppointmentCreateComponent implements OnInit {
     }
   }
 
-  saveAppointment() {
+ saveAppointment() {
+    // 🪄 MAGIA ANTI-SPAM: Borra cualquier notificación vieja antes de mostrar una nueva
+    this.messageService.clear(); 
+
     if (!this.appointment.patientId || !this.appointment.serviceType || !this.appointment.date) {
       this.messageService.add({ severity: 'warn', summary: 'Campos incompletos', detail: 'Por favor selecciona el paciente, servicio y fecha.' });
       return;
@@ -205,15 +208,38 @@ export class AppointmentCreateComponent implements OnInit {
       notes: notasFinales
     };
 
-    // 🪄 MAGIA RESTAURADA: Si estamos en modo edición, mandamos update en lugar de create
     if (this.isEditMode) {
       this.appointmentUseCase.executeUpdate(this.appointment.id, payloadParaBackend).subscribe({
-        next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Reprogramada', detail: 'La cita se actualizó correctamente.' });
-          setTimeout(() => { this.router.navigate(['/dashboard/citas']); }, 1500);
+        next: (res: any) => {
+          
+          if (res && res.sin_cambios) {
+             // 🪄 1. Limpiamos para evitar que se apilen
+             this.messageService.clear();
+             
+             // 🪄 2. Lanzamos el aviso informativo
+             this.messageService.add({ 
+               severity: 'info', 
+               summary: 'Sin modificaciones', 
+               detail: 'No se realizaron cambios.' 
+             });
+
+             // 🪄 3. Lo redirigimos a la tabla de citas como si hubiera sido un éxito normal
+             setTimeout(() => { this.router.navigate(['/dashboard/citas']); }, 1500);
+          } 
+          else {
+            this.messageService.clear();
+            this.messageService.add({ 
+              severity: 'success', 
+              summary: 'Reprogramada', 
+              detail: 'La cita se actualizó correctamente.' 
+            });
+            setTimeout(() => { this.router.navigate(['/dashboard/citas']); }, 1500);
+          }
         },
         error: (err) => {
           this.isSaving = false;
+          // Limpiamos también en caso de error por si el usuario dio muchos clics
+          this.messageService.clear(); 
           const msg = err.error?.message || 'Error de conexión.';
           this.messageService.add({ severity: 'error', summary: 'Error al reprogramar', detail: msg });
         }
