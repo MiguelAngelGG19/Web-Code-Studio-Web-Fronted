@@ -69,6 +69,17 @@
           <i class="pi pi-bolt text-bolt-lg" [class.font-bold]="rlaEjercicios.isActive"></i>
           <span *ngIf="!isDesktopCollapsed || isMobileMenuOpen" class="text-sm fadein" [class.font-bold]="rlaEjercicios.isActive" [class.font-medium]="!rlaEjercicios.isActive">Ejercicios</span>
         </a>
+
+        <a routerLink="/dashboard/rutinas" routerLinkActive #rlaRutinas="routerLinkActive" (click)="closeMenu()" 
+           [ngClass]="(isDesktopCollapsed && !isMobileMenuOpen) ? 'justify-content-center' : 'gap-3'"
+           class="flex align-items-center p-3 border-round-md cursor-pointer no-underline transition-colors"
+           [class.bg-activa-primary-light]="rlaRutinas.isActive"
+           [class.text-activa-primary]="rlaRutinas.isActive"
+           [class.text-color-secondary]="!rlaRutinas.isActive"
+           [class.hover:surface-hover]="!rlaRutinas.isActive">
+          <i class="pi pi-folder text-lg" [class.font-bold]="rlaRutinas.isActive"></i>
+          <span *ngIf="!isDesktopCollapsed || isMobileMenuOpen" class="text-sm fadein" [class.font-bold]="rlaRutinas.isActive" [class.font-medium]="!rlaRutinas.isActive">Rutinas</span>
+        </a>
       </div>
 
       <div class="p-3 border-top-1 overflow-hidden flex-shrink-0" style="border-color: #E2E8F0 !important;">

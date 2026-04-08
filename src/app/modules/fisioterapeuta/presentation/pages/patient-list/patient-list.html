@@ -63,6 +63,7 @@
         </div>
 
         <div class="flex gap-2 mt-auto pt-3 border-top-1 surface-border" (click)="$event.stopPropagation()">
+          <p-button label="Ver Paciente" icon="pi pi-eye" (onClick)="verDetallePaciente(patient.id)" styleClass="ver-paciente-btn border-round-lg w-full font-bold py-2 shadow-none"></p-button>
           <p-button label="Editar Paciente" (onClick)="abrirModalEditar(patient)" styleClass="bg-white text-color border-1 surface-border hover:surface-hover border-round-lg w-full font-bold py-2 shadow-none"></p-button>
         </div>
         

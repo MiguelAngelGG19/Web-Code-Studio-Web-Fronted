@@ -8,6 +8,8 @@ import { AppointmentsComponent } from './modules/fisioterapeuta/presentation/pag
 import { AppointmentCreateComponent } from './modules/fisioterapeuta/presentation/pages/appointment-create/appointment-create';
 import { AppointmentDetailComponent } from './modules/fisioterapeuta/presentation/pages/appointment-detail/appointment-detail';
 import { AppointmentListComponent } from './modules/fisioterapeuta/presentation/pages/appointment-list/appointment-list';
+import { PatientViewComponent } from './modules/fisioterapeuta/presentation/pages/patient-view/patient-view';
+import { RoutineLibraryComponent } from './modules/fisioterapeuta/presentation/pages/routine-library/routine-library';
 import { LoginFisioComponent } from './modules/fisioterapeuta/presentation/pages/login-fisio/login-fisio'; 
 import { VerifyDataComponent } from './modules/fisioterapeuta/presentation/pages/verify-data/verify-data'; 
 
@@ -53,9 +55,11 @@ export const routes: Routes = [
       
       // Módulo de Agenda
       { path: 'citas', component: AppointmentsComponent },
+      { path: 'rutinas', component: RoutineLibraryComponent },
       { path: 'nueva-cita', component: AppointmentCreateComponent },
       { path: 'detalle-cita', component: AppointmentDetailComponent },
       { path: 'historial-citas', component: AppointmentListComponent },
+      { path: 'ver-paciente/:id', component: PatientViewComponent },
     ]
   },
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms'; 
 
 import { ButtonModule } from 'primeng/button';
@@ -39,7 +39,8 @@ export class PatientListComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private patientUseCase: PatientUseCase,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -112,7 +113,7 @@ export class PatientListComponent implements OnInit {
   }
 
   verDetallePaciente(id: number) {
-    console.log('Navegando al expediente del paciente con ID:', id);
+    this.router.navigate(['/dashboard/ver-paciente', id]);
   }
 
   abrirModalEditar(patient: any) {
