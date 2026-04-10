@@ -13,8 +13,10 @@ import { RoutineLibraryComponent } from './modules/fisioterapeuta/presentation/p
 import { LoginFisioComponent } from './modules/fisioterapeuta/presentation/pages/login-fisio/login-fisio'; 
 import { VerifyDataComponent } from './modules/fisioterapeuta/presentation/pages/verify-data/verify-data'; 
 
+
 // IMPORTAMOS EL CADENERO
 import { authGuard } from './core/auth/application/auth.guard';
+import { PerfilComponent } from './modules/fisioterapeuta/presentation/pages/profile/profile';
 
 export const routes: Routes = [
   
@@ -52,6 +54,7 @@ export const routes: Routes = [
       { path: 'ejercicios', component: BancoEjerciciosComponent },
       { path: 'pacientes', component: PatientListComponent },
       { path: 'nuevo-paciente', component: PatientCreateComponent },
+      { path: 'perfil', component: PerfilComponent },
       
       // Módulo de Agenda
       { path: 'citas', component: AppointmentsComponent },

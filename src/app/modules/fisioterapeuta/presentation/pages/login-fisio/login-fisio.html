@@ -9,7 +9,7 @@
       </div>
       <span class="font-bold text-xl text-color">ACTIVA</span>
     </div>
-    </div>
+  </div>
 
   <div class="flex-1 flex justify-content-center align-items-center p-4">
     <div class="bg-activa-surface border-round-2xl shadow-2 p-5 w-full" style="max-width: 30rem;">
@@ -28,20 +28,32 @@
           <label class="text-color font-medium text-sm block mb-2">Correo Electrónico</label>
           <span class="p-input-icon-left w-full custom-input-icon">
             <i class="pi pi-envelope text-color-secondary"></i>
-            <input pInputText type="email" formControlName="email" placeholder="ejemplo@correo.com" class="p-3 border-round-lg w-full">
+            <input pInputText type="email" formControlName="email" 
+                   placeholder="ejemplo@correo.com" 
+                   class="p-3 border-round-lg w-full"
+                   (keyup.enter)="enfocarSiguiente('passInput')">
           </span>
         </div>
 
         <div class="mb-2">
           <div class="flex justify-content-between align-items-center mb-2">
             <label class="text-color font-medium text-sm m-0">Contraseña</label>
-            <a href="#" class="text-xs text-activa-primary no-underline hover:underline">¿Olvidaste tu contraseña?</a>
           </div>
           <span class="p-input-icon-left w-full custom-input-icon">
             <i class="pi pi-lock text-color-secondary z-2"></i>
-            <p-password formControlName="password" [toggleMask]="true" [feedback]="false" placeholder="Ingresa tu contraseña" styleClass="w-full" inputStyleClass="p-3 border-round-lg w-full" class="w-full"></p-password>
+            <p-password formControlName="password" 
+                        inputId="passInput" 
+                        [toggleMask]="true" 
+                        [feedback]="false" 
+                        placeholder="Ingresa tu contraseña" 
+                        styleClass="w-full" 
+                        inputStyleClass="p-3 border-round-lg w-full" 
+                        class="w-full"
+                        (keyup.enter)="onLogin()">
+            </p-password>
           </span>
         </div>
+        <a href="#" class="text-xs text-activa-primary no-underline hover:underline">¿Olvidaste tu contraseña?</a>
 
         <p-button label="Iniciar Sesión" 
                   type="submit" 
