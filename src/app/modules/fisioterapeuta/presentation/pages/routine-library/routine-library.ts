@@ -24,7 +24,6 @@ import { environment } from '../../../../../../environments/environment.developm
 })
 export class RoutineLibraryComponent implements OnInit {
   routineTemplates: any[] = [];
-  filteredRoutineTemplates: any[] = [];
   loading = false;
   searchTerm = '';
 
@@ -51,6 +50,9 @@ export class RoutineLibraryComponent implements OnInit {
   filteredPatients: any[] = [];
   patientSearch = '';
   selectedAssignPatientId: number | null = null;
+  editingInitialSnapshot = '';
+  showEditorConfirmModal = false;
+  editorConfirmMode: 'close-with-save' | 'save-without-changes' = 'close-with-save';
 
   form = {
     name: '',
@@ -73,6 +75,8 @@ export class RoutineLibraryComponent implements OnInit {
     this.loadPatients();
   }
 
+  private readonly TEMPLATES_CACHE_KEY = 'activa_routine_templates_cache';
+
   loadTemplates(): void {
     const physioId = this.resolvePhysioId();
     if (!physioId) {
@@ -80,21 +84,33 @@ export class RoutineLibraryComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+    // Mostrar caché inmediatamente si existe
+    const cached = localStorage.getItem(this.TEMPLATES_CACHE_KEY + '_' + physioId);
+    if (cached) {
+      try {
+        this.routineTemplates = JSON.parse(cached);
+      } catch { /* caché corrupta, se ignora */ }
+    }
+
+    this.loading = this.routineTemplates.length === 0;
     this.http.get<any>(`${environment.webservice.baseUrl}/api/routines/templates?physiotherapistId=${physioId}`).subscribe({
       next: (resp) => {
-        this.routineTemplates = (resp?.data || []).map((item: any) => ({
+        const fresh = (resp?.data || []).map((item: any) => ({
           id_template: item.id_template,
           name: item.name,
           tag: item.tag || 'General',
           created_at: item.created_at,
           exercises: item.exercises || []
         }));
-        this.filteredRoutineTemplates = [...this.routineTemplates];
+        this.routineTemplates = fresh;
         this.loading = false;
+        localStorage.setItem(this.TEMPLATES_CACHE_KEY + '_' + physioId, JSON.stringify(fresh));
       },
       error: () => {
         this.loading = false;
+        if (this.routineTemplates.length === 0) {
+          this.messageService.add({ severity: 'warn', summary: 'Sin conexión', detail: 'No se pudo actualizar la lista de rutinas. Verifica el servidor.' });
+        }
       }
     });
   }
@@ -130,14 +146,10 @@ export class RoutineLibraryComponent implements OnInit {
     });
   }
 
-  filterTemplates(): void {
-    const term = this.normalize(this.searchTerm);
-    if (!term) {
-      this.filteredRoutineTemplates = [...this.routineTemplates];
-      return;
-    }
-
-    this.filteredRoutineTemplates = this.routineTemplates.filter((item: any) =>
+  get visibleRoutineTemplates(): any[] {
+    const term = this.normalize(this.searchTerm || '');
+    if (!term) return this.routineTemplates;
+    return this.routineTemplates.filter((item: any) =>
       this.normalize(item.name).includes(term) || this.normalize(item.tag).includes(term)
     );
   }
@@ -299,6 +311,8 @@ export class RoutineLibraryComponent implements OnInit {
           };
         });
 
+        this.editingInitialSnapshot = this.buildEditingSnapshot();
+
         this.loadingTemplateDetail = false;
       },
       error: () => {
@@ -313,8 +327,8 @@ export class RoutineLibraryComponent implements OnInit {
     const source = !term
       ? [...this.exerciseCatalog]
       : this.exerciseCatalog.filter((item: any) =>
-          this.normalize(item.name).includes(term) || this.normalize(item.bodyZone).includes(term)
-        );
+      this.normalize(item.name).includes(term) || this.normalize(item.bodyZone).includes(term)
+    );
 
     const selectedSet = new Set(this.editingForm.exerciseIds || []);
     return source.sort((a: any, b: any) => {
@@ -322,9 +336,7 @@ export class RoutineLibraryComponent implements OnInit {
       const bSelected = selectedSet.has(b.id) ? 0 : 1;
       if (aSelected !== bSelected) return aSelected - bSelected;
       return String(a.name || '').localeCompare(String(b.name || ''));
-    }).filter((item: any) =>
-      this.normalize(item.name).includes(term) || this.normalize(item.bodyZone).includes(term)
-    );
+    });
   }
 
   getEditingExerciseConfig(id: number): { repetitions: number; sets: number; notes: string } {
@@ -365,9 +377,54 @@ export class RoutineLibraryComponent implements OnInit {
       return;
     }
 
-    this.http.put<any>(`${environment.webservice.baseUrl}/api/routines/templates/${this.editingTemplate.id_template}`, this.buildEditingTemplatePayload()).subscribe({
+    if (!this.hasEditingChanges()) {
+      this.editorConfirmMode = 'save-without-changes';
+      this.showEditorConfirmModal = true;
+      return;
+    }
+
+    this.persistTemplateEditorChanges({ closeAfterSave: false, showSuccessToast: true });
+  }
+
+  requestCloseTemplateEditor(): void {
+    if (!this.hasEditingChanges()) {
+      this.showTemplateEditorModal = false;
+      return;
+    }
+
+    this.editorConfirmMode = 'close-with-save';
+    this.showEditorConfirmModal = true;
+  }
+
+  cancelEditorConfirm(): void {
+    this.showEditorConfirmModal = false;
+  }
+
+  confirmEditorAction(): void {
+    if (this.editorConfirmMode === 'save-without-changes') {
+      this.showEditorConfirmModal = false;
+      this.showTemplateEditorModal = false;
+      return;
+    }
+
+    this.persistTemplateEditorChanges({ closeAfterSave: true, showSuccessToast: true });
+  }
+
+  private persistTemplateEditorChanges(opts: { closeAfterSave: boolean; showSuccessToast: boolean }): void {
+    this.showEditorConfirmModal = false;
+
+    this.http.put<any>(`${environment.webservice.baseUrl}/api/routines/templates/${this.editingTemplate.id_template}`, {
+      ...this.buildEditingTemplatePayload(),
+      replaceExisting: true,
+    }).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Rutina guardada', detail: 'Se actualizaron los cambios en la biblioteca.' });
+        if (opts.showSuccessToast) {
+          this.messageService.add({ severity: 'success', summary: 'Rutina guardada', detail: 'Se actualizaron los cambios en la biblioteca.' });
+        }
+        this.editingInitialSnapshot = this.buildEditingSnapshot();
+        if (opts.closeAfterSave) {
+          this.showTemplateEditorModal = false;
+        }
         this.loadTemplates();
       },
       error: (err) => {
@@ -392,7 +449,10 @@ export class RoutineLibraryComponent implements OnInit {
       return;
     }
 
-    this.http.put<any>(`${environment.webservice.baseUrl}/api/routines/templates/${this.editingTemplate.id_template}`, this.buildEditingTemplatePayload()).subscribe({
+    this.http.put<any>(`${environment.webservice.baseUrl}/api/routines/templates/${this.editingTemplate.id_template}`, {
+      ...this.buildEditingTemplatePayload(),
+      replaceExisting: true,
+    }).subscribe({
       next: () => {
         this.router.navigate(['/dashboard/ver-paciente', this.selectedAssignPatientId], {
           queryParams: {
@@ -424,6 +484,33 @@ export class RoutineLibraryComponent implements OnInit {
       exerciseIds,
       exerciseItems,
     };
+  }
+
+  private hasEditingChanges(): boolean {
+    return this.buildEditingSnapshot() !== this.editingInitialSnapshot;
+  }
+
+  private buildEditingSnapshot(): string {
+    const ids = [...(this.editingForm.exerciseIds || [])]
+      .map((id: any) => Number(id))
+      .filter((id: number) => Number.isFinite(id))
+      .sort((a: number, b: number) => a - b);
+
+    const exerciseItems = ids.map((exerciseId: number) => {
+      const cfg = this.getEditingExerciseConfig(exerciseId);
+      return {
+        exerciseId,
+        sets: Number(cfg.sets) || null,
+        repetitions: Number(cfg.repetitions) || null,
+        notes: (cfg.notes || '').trim(),
+      };
+    });
+
+    return JSON.stringify({
+      name: (this.editingForm.name || '').trim(),
+      tag: (this.editingForm.tag || '').trim(),
+      exerciseItems,
+    });
   }
 
   private normalize(value: string): string {

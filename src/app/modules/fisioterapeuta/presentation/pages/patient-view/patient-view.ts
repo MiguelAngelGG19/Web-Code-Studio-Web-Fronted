@@ -99,6 +99,7 @@ export class PatientViewComponent implements OnInit {
   placeholderImg = 'https://placehold.co/1200x800/0d9488/ffffff?text=ACTIVA+Fisio';
   pendingOpenRoutineFromRoute = false;
   pendingTemplateId: number | null = null;
+  private initialRoutineSnapshot = '';
 
   // ===== EDITAR PACIENTE =====
   showEditPatientModal = false;
@@ -173,6 +174,7 @@ export class PatientViewComponent implements OnInit {
   private mapPatient(p: any): any {
     const cap = (s: string) => s ? s.toLowerCase().split(' ').map((w: string) =>
       w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : '';
+    const resolvedEmail = p.email || p.user?.email || p.User?.email || p.user_email || '';
     const nombre = cap(p.first_name || p.firstName || '');
     const apP = cap(p.last_name_paternal || p.lastNameP || '');
     const apM = cap(p.last_name_maternal || p.lastNameM || '');
@@ -182,7 +184,7 @@ export class PatientViewComponent implements OnInit {
       first_name: nombre,
       last_name_p: apP,
       last_name_m: apM,
-      email: p.email || p.user?.email || '',
+      email: resolvedEmail,
       birth_year: (p.birth_date || p.birthYear || '').toString().substring(0, 4),
       height: p.height,
       weight: p.weight,
@@ -498,6 +500,7 @@ export class PatientViewComponent implements OnInit {
     this.routineTemplateSearch = '';
     this.loadRoutineTemplates();
     this.exerciseConfigMap = {};
+    this.initialRoutineSnapshot = this.buildRoutineSnapshot();
     this.showRoutineModal = true;
   }
 
@@ -520,6 +523,7 @@ export class PatientViewComponent implements OnInit {
       };
     });
     this.loadRoutineTemplates();
+    this.initialRoutineSnapshot = this.buildRoutineSnapshot();
     this.showRoutineModal = true;
   }
 
@@ -610,6 +614,7 @@ export class PatientViewComponent implements OnInit {
           summary: 'Plantilla cargada',
           detail: ''
         });
+        this.initialRoutineSnapshot = this.buildRoutineSnapshot();
         this.cdr.detectChanges();
       },
       error: () => {
@@ -629,6 +634,23 @@ export class PatientViewComponent implements OnInit {
       this.messageService.add({ severity: 'warn', summary: 'Campos requeridos', detail: 'Nombre, fecha inicio y fecha fin son obligatorios.' });
       return;
     }
+
+    const normalizedName = this.normalizeText(this.routineForm.name || '').trim();
+    const duplicatedName = (this.routines || []).some((routine: any) => {
+      const isCurrentEditing = Boolean(this.editingRoutine?.id) && Number(routine.id) === Number(this.editingRoutine.id);
+      if (isCurrentEditing) return false;
+      return this.normalizeText(routine?.name || '').trim() === normalizedName;
+    });
+
+    if (duplicatedName) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Nombre duplicado',
+        detail: 'No puede haber dos rutinas con el mismo nombre para este paciente.',
+      });
+      return;
+    }
+
     if (!Array.isArray(this.routineForm.exerciseIds) || this.routineForm.exerciseIds.length === 0) {
       this.messageService.add({ severity: 'warn', summary: 'Sin ejercicios', detail: 'Debes seleccionar al menos un ejercicio.' });
       return;
@@ -662,7 +684,29 @@ export class PatientViewComponent implements OnInit {
     };
 
     if (this.editingRoutine?.id) {
+      if (!this.hasRoutineChanges()) {
+        this.confirmationService.confirm({
+          header: 'Sin cambios',
+          message: 'No se realizaron cambios en la rutina.',
+          icon: 'pi pi-info-circle',
+          acceptLabel: 'Continuar',
+          rejectLabel: 'Cancelar',
+          rejectButtonStyleClass: 'p-button-text',
+          accept: () => {
+            this.showRoutineModal = false;
+          },
+          reject: () => {
+            this.showRoutineModal = true;
+          }
+        });
+        return;
+      }
+
       this.http.put<any>(`${environment.webservice.baseUrl}/api/routines/${this.editingRoutine.id}`, {
+        name: this.routineForm.name,
+        startDate: this.routineForm.startDate,
+        endDate: this.routineForm.endDate,
+        replaceExisting: true,
         exerciseIds: this.routineForm.exerciseIds,
         exerciseItems,
       }).subscribe({
@@ -761,6 +805,35 @@ export class PatientViewComponent implements OnInit {
       const name = this.normalizeText(e.name || '');
       const zone = this.normalizeText(e.body_zone || '');
       return name.includes(q) || zone.includes(q);
+    });
+  }
+
+  private hasRoutineChanges(): boolean {
+    return this.buildRoutineSnapshot() !== this.initialRoutineSnapshot;
+  }
+
+  private buildRoutineSnapshot(): string {
+    const ids = Array.isArray(this.routineForm?.exerciseIds)
+      ? this.routineForm.exerciseIds.map((id: any) => Number(id)).filter((id: number) => Number.isFinite(id))
+      : [];
+
+    const exerciseConfig = ids
+      .sort((a: number, b: number) => a - b)
+      .map((id: number) => {
+        const config = this.getExerciseConfig(id);
+        return {
+          id,
+          sets: Number(config.sets) || null,
+          repetitions: Number(config.repetitions) || null,
+          notes: (config.notes || '').trim(),
+        };
+      });
+
+    return JSON.stringify({
+      name: (this.routineForm?.name || '').trim(),
+      startDate: this.routineForm?.startDate || '',
+      endDate: this.routineForm?.endDate || '',
+      exerciseConfig,
     });
   }
 
