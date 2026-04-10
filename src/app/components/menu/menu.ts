@@ -35,10 +35,10 @@ export class Menu implements OnInit {
 
     this.userMenuItems = [
       {
-        label: 'Configuración',
-        icon: 'pi pi-cog',
+        label: 'Perfil',
+        icon: 'pi pi-user',
         command: () => {
-          // this.router.navigate(['/dashboard/configuracion']);
+          this.router.navigate(['/dashboard/perfil']);
         }
       },
       { separator: true }, 

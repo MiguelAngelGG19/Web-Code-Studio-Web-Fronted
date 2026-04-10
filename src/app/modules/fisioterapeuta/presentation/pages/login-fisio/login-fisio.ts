@@ -95,4 +95,10 @@ export class LoginFisioComponent implements OnInit {
       }
     });
   }
+  enfocarSiguiente(idDelInput: string) {
+    const elemento = document.getElementById(idDelInput);
+    if (elemento) {
+      elemento.focus();
+    }
+  }
 }
