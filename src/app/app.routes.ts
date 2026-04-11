@@ -12,11 +12,13 @@ import { PatientViewComponent } from './modules/fisioterapeuta/presentation/page
 import { RoutineLibraryComponent } from './modules/fisioterapeuta/presentation/pages/routine-library/routine-library';
 import { LoginFisioComponent } from './modules/fisioterapeuta/presentation/pages/login-fisio/login-fisio'; 
 import { VerifyDataComponent } from './modules/fisioterapeuta/presentation/pages/verify-data/verify-data'; 
-
+import { HomeComponent } from './modules/fisioterapeuta/presentation/pages/home/home';
+import { PerfilComponent } from './modules/fisioterapeuta/presentation/pages/profile/profile';
 
 // IMPORTAMOS EL CADENERO
 import { authGuard } from './core/auth/application/auth.guard';
-import { PerfilComponent } from './modules/fisioterapeuta/presentation/pages/profile/profile';
+
+
 
 export const routes: Routes = [
   
@@ -51,6 +53,7 @@ export const routes: Routes = [
     component: Menu, 
     canActivate: [authGuard], // 🛡️ MAGIA: Al proteger el padre, proteges a todos los hijos automáticamente
     children: [
+      { path: 'inicio', component: HomeComponent },
       { path: 'ejercicios', component: BancoEjerciciosComponent },
       { path: 'pacientes', component: PatientListComponent },
       { path: 'nuevo-paciente', component: PatientCreateComponent },

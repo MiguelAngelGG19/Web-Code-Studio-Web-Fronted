@@ -31,7 +31,7 @@
             <input pInputText type="email" formControlName="email" 
                    placeholder="ejemplo@correo.com" 
                    class="p-3 border-round-lg w-full"
-                   (keyup.enter)="enfocarSiguiente('passInput')">
+                   (keydown.enter)="enfocarSiguiente('passInput', $event)">
           </span>
         </div>
 
@@ -48,8 +48,7 @@
                         placeholder="Ingresa tu contraseña" 
                         styleClass="w-full" 
                         inputStyleClass="p-3 border-round-lg w-full" 
-                        class="w-full"
-                        (keyup.enter)="onLogin()">
+                        class="w-full">
             </p-password>
           </span>
         </div>
