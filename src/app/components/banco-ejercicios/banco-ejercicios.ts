@@ -256,6 +256,9 @@ export class BancoEjerciciosComponent implements OnInit {
             tag: t.tag || 'General',
             created_at: t.created_at,
             exercisesCount: (t.exercises || []).length,
+            exerciseIds: (t.exercises || [])
+              .map((ex: any) => Number(ex?.id_exercise ?? ex?.id))
+              .filter((id: number) => Number.isFinite(id)),
           }))
           .sort((a: any, b: any) => {
             const dA = new Date(a.created_at || 0).getTime();
@@ -299,7 +302,28 @@ export class BancoEjerciciosComponent implements OnInit {
   }
 
   selectRoutineTemplate(templateId: number): void {
+    const routine = this.filteredRoutineTemplates.find((r: any) => r.id_template === templateId);
+    if (!routine) return;
+
+    if (this.isRoutineDisabledForSelectedExercise(routine)) {
+      this.selectedRoutineTemplateId = null;
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Ejercicio duplicado',
+        detail: 'Este ejercicio ya existe en la rutina seleccionada.',
+      });
+      return;
+    }
+
     this.selectedRoutineTemplateId = templateId;
+  }
+
+  isRoutineDisabledForSelectedExercise(routine: any): boolean {
+    const exerciseId = Number(this.selectedExercise?.id);
+    if (!exerciseId || Number.isNaN(exerciseId)) return false;
+
+    const ids = Array.isArray(routine?.exerciseIds) ? routine.exerciseIds : [];
+    return ids.includes(exerciseId);
   }
 
   saveExerciseInRoutineTemplate(): void {

@@ -10,7 +10,7 @@
       <p>&nbsp;</p>
       <p>Plantillas de tus Mejores Rutinas</p>
     </div>
-    <input pInputText [(ngModel)]="searchTerm" (input)="filterTemplates()" placeholder="Buscar rutina o etiqueta" class="header-search header-search-compact">
+    <input pInputText [(ngModel)]="searchTerm" placeholder="Buscar rutina o etiqueta" class="header-search header-search-compact">
   </div>
 
   <div class="library-grid">
@@ -73,7 +73,7 @@
       <h2>Listar Rutinas</h2>
       <div class="loading-box" *ngIf="loading">Cargando rutinas...</div>
       <div class="template-list" *ngIf="!loading">
-        <button class="template-item template-item-button" *ngFor="let template of filteredRoutineTemplates" type="button" (click)="openTemplateEditor(template)">
+        <button class="template-item template-item-button" *ngFor="let template of visibleRoutineTemplates" type="button" (click)="openTemplateEditor(template)">
           <div>
             <p class="template-name">{{ template.name }}</p>
             <p class="template-meta">{{ template.tag }} · {{ template.exercises.length }} ejercicio(s)</p>
@@ -82,7 +82,7 @@
           <span class="template-date">{{ template.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
         </button>
 
-        <div class="loading-box" *ngIf="filteredRoutineTemplates.length === 0">No hay rutinas registradas.</div>
+        <div class="loading-box" *ngIf="visibleRoutineTemplates.length === 0">No hay rutinas registradas.</div>
       </div>
     </section>
   </div>
@@ -133,7 +133,7 @@
   </div>
 </p-dialog>
 
-<p-dialog [(visible)]="showTemplateEditorModal" [modal]="true" [closable]="true" [dismissableMask]="true"
+<p-dialog [(visible)]="showTemplateEditorModal" [modal]="true" [closable]="false" [dismissableMask]="false"
   [style]="{ width: '96vw', maxWidth: '1260px' }" styleClass="template-editor-modal" [showHeader]="false">
   <div class="template-editor-wrap" *ngIf="!loadingTemplateDetail; else loadingTemplateEditorTpl">
     <div class="template-editor-head">
@@ -141,6 +141,9 @@
         <h2>{{ editingForm.name || 'Rutina' }}</h2>
         <p></p>
       </div>
+      <button class="editor-close-btn" type="button" (click)="requestCloseTemplateEditor()" aria-label="Cerrar editor">
+        <i class="pi pi-times"></i>
+      </button>
     </div>
 
     <div class="template-editor-grid">
@@ -222,4 +225,25 @@
   <ng-template #loadingTemplateEditorTpl>
     <div class="loading-box">Cargando rutina seleccionada...</div>
   </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="showEditorConfirmModal" [modal]="true" [closable]="false" [dismissableMask]="false"
+  [style]="{ width: '92vw', maxWidth: '520px' }" styleClass="custom-dialog" [showHeader]="false">
+  <div class="editor-confirm-wrap">
+    <span class="editor-confirm-badge">
+      {{ editorConfirmMode === 'close-with-save' ? 'Confirmacion de cambios' : 'Sin cambios detectados' }}
+    </span>
+    <h3>{{ editorConfirmMode === 'close-with-save' ? 'Deseas guardar los cambios?' : 'No tienes cambios' }}</h3>
+    <p>
+      {{ editorConfirmMode === 'close-with-save'
+        ? 'Se detectaron cambios en la rutina. Puedes guardarlos antes de salir.'
+        : 'No tienes cambios en esta rutina. Continuar cerrara el editor.' }}
+    </p>
+    <div class="editor-confirm-actions">
+      <button class="btn-cancel" type="button" (click)="cancelEditorConfirm()">Cancelar</button>
+      <button class="btn-save" type="button" (click)="confirmEditorAction()">
+        {{ editorConfirmMode === 'close-with-save' ? 'Aceptar (Guardar cambios)' : 'Continuar' }}
+      </button>
+    </div>
+  </div>
 </p-dialog>

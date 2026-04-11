@@ -4,10 +4,12 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  background: radial-gradient(circle at 12% 15%, rgba(20, 184, 166, 0.12), transparent 45%),
-    radial-gradient(circle at 88% 4%, rgba(251, 191, 36, 0.16), transparent 40%),
-    linear-gradient(180deg, #f8fffe 0%, #eef8f7 100%);
+  background:
+    radial-gradient(circle at 12% 15%, rgba(0, 151, 167, 0.12), transparent 42%),
+    radial-gradient(circle at 88% 4%, rgba(10, 25, 47, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(223, 228, 234, 0.96) 0%, rgba(223, 228, 234, 1) 100%);
   min-height: 100vh;
+  color: var(--activa-text-main);
 }
 
 .ambient-orb {
@@ -22,7 +24,7 @@
   height: 180px;
   top: -32px;
   right: 24px;
-  background: radial-gradient(circle, rgba(20, 184, 166, 0.24), rgba(20, 184, 166, 0.04));
+  background: radial-gradient(circle, rgba(0, 151, 167, 0.24), rgba(0, 151, 167, 0.04));
 }
 
 .orb-b {
@@ -30,7 +32,7 @@
   height: 130px;
   bottom: 40px;
   left: 35%;
-  background: radial-gradient(circle, rgba(14, 116, 144, 0.2), rgba(14, 116, 144, 0.02));
+  background: radial-gradient(circle, rgba(10, 25, 47, 0.16), rgba(10, 25, 47, 0.02));
 }
 
 .library-header {
@@ -52,15 +54,26 @@
 
 .library-header p {
   margin: 0.25rem 0 0;
-  color: #64748b;
+  color: var(--activa-text-muted);
 }
 
 .header-search,
 .field-input {
   width: 100%;
-  border: 1px solid #dbe4ea;
-  border-radius: 10px;
+  border: 1px solid var(--activa-surface-border);
+  border-radius: 14px;
   padding: 0.75rem 0.9rem;
+  background: rgba(241, 245, 249, 0.92);
+  color: var(--activa-text-main);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.header-search:focus,
+.field-input:focus {
+  outline: none;
+  border-color: rgba(0, 151, 167, 0.48);
+  box-shadow: 0 0 0 4px rgba(0, 151, 167, 0.12);
+  background: #f8fbfd;
 }
 
 .library-grid {
@@ -73,12 +86,12 @@
 
 .builder-card,
 .list-card {
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(241, 245, 249, 0.94);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(20, 184, 166, 0.14);
-  border-radius: 16px;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  border-radius: 20px;
   padding: 1rem;
-  box-shadow: 0 14px 35px rgba(20, 60, 60, 0.08);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
 }
 
 .builder-composer {
@@ -119,15 +132,16 @@
 
 .exercise-item,
 .template-item {
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border: 1px solid rgba(203, 213, 225, 0.92);
+  border-radius: 16px;
   padding: 0.8rem;
-  background: rgba(248, 250, 252, 0.86);
+  background: rgba(241, 245, 249, 0.96);
 }
 
 .exercise-item.selected {
-  border-color: #14b8a6;
-  background: rgba(20, 184, 166, 0.08);
+  border-color: rgba(0, 151, 167, 0.55);
+  background: rgba(224, 247, 250, 0.86);
+  box-shadow: 0 0 0 3px rgba(0, 151, 167, 0.08);
 }
 
 .exercise-shell {
@@ -150,8 +164,8 @@
   overflow: hidden;
   padding: 0;
   cursor: pointer;
-  background: linear-gradient(145deg, #0d9488, #99f6e4);
-  box-shadow: 0 14px 30px rgba(15, 118, 110, 0.16);
+  background: linear-gradient(145deg, var(--activa-brand-dark), var(--activa-primary));
+  box-shadow: 0 14px 30px rgba(10, 25, 47, 0.18);
 }
 
 .exercise-media-thumb img {
@@ -198,9 +212,9 @@
   width: 30px;
   height: 30px;
   border-radius: 8px;
-  border: 1px solid rgba(20, 184, 166, 0.35);
-  background: rgba(20, 184, 166, 0.08);
-  color: #0f766e;
+  border: 1px solid rgba(0, 151, 167, 0.25);
+  background: rgba(224, 247, 250, 0.96);
+  color: var(--activa-primary-hover);
   cursor: pointer;
 }
 
@@ -216,11 +230,12 @@
 }
 
 .zone-chip {
-  background: rgba(20, 184, 166, 0.12);
-  color: #0d9488;
+  background: rgba(224, 247, 250, 0.98);
+  color: var(--activa-primary-hover);
   border-radius: 999px;
   padding: 0.25rem 0.7rem;
   font-size: 0.75rem;
+  border: 1px solid rgba(0, 151, 167, 0.14);
 }
 
 .exercise-config {
@@ -232,7 +247,7 @@
 
 .exercise-desc {
   margin: 0.55rem 0 0;
-  color: #5f7084;
+  color: var(--activa-text-muted);
   font-size: 0.8rem;
   line-height: 1.5;
 }
@@ -249,12 +264,24 @@
   margin-top: 1rem;
   width: 100%;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--activa-brand-dark), var(--activa-primary));
   color: white;
   padding: 0.85rem 1rem;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 16px 32px rgba(10, 25, 47, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.save-btn:hover,
+.btn-save:hover,
+.btn-cancel:hover,
+.template-item-button:hover,
+.patient-row:hover,
+.editor-close-btn:hover,
+.btn-preview:hover {
+  transform: translateY(-1px);
 }
 
 .template-item {
@@ -267,38 +294,94 @@
 .template-item-button {
   width: 100%;
   text-align: left;
-  border: 1px solid #d9e5f0;
-  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(203, 213, 225, 0.94);
+  background: rgba(241, 245, 249, 0.98);
   cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .template-item-button:hover {
-  border-color: rgba(20, 184, 166, 0.35);
+  border-color: rgba(0, 151, 167, 0.4);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
 }
 
 .template-open-hint {
   margin: 0.3rem 0 0;
-  color: #0f766e;
+  color: var(--activa-primary-hover);
   font-size: 0.74rem;
   font-weight: 700;
 }
 
+::ng-deep .routine-preview-modal .p-dialog,
+::ng-deep .template-editor-modal .p-dialog,
+::ng-deep .custom-dialog .p-dialog {
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(203, 213, 225, 0.9);
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.18);
+}
+
 ::ng-deep .routine-preview-modal .p-dialog-content,
-::ng-deep .template-editor-modal .p-dialog-content {
+::ng-deep .template-editor-modal .p-dialog-content,
+::ng-deep .custom-dialog .p-dialog-content {
   padding: 0 !important;
+  background: var(--activa-surface);
+}
+
+::ng-deep .p-dialog-mask {
+  backdrop-filter: blur(5px);
+  background: rgba(10, 25, 47, 0.22) !important;
+}
+
+::ng-deep .p-toast {
+  width: min(420px, calc(100vw - 2rem));
+}
+
+::ng-deep .p-toast .p-toast-message {
+  border: 1px solid rgba(203, 213, 225, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+::ng-deep .p-toast .p-toast-message-content {
+  padding: 1rem 1.05rem;
+  gap: 0.8rem;
+}
+
+::ng-deep .p-toast .p-toast-summary {
+  color: var(--activa-text-main);
+  font-weight: 800;
+}
+
+::ng-deep .p-toast .p-toast-detail {
+  color: var(--activa-text-muted);
+  margin-top: 0.2rem;
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-success {
+  background: linear-gradient(180deg, #f3fbfc 0%, #e0f7fa 100%);
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-warn {
+  background: linear-gradient(180deg, #fff8eb 0%, #fef3c7 100%);
+}
+
+::ng-deep .p-toast .p-toast-message.p-toast-message-error {
+  background: linear-gradient(180deg, #fff4f4 0%, #fee2e2 100%);
 }
 
 .preview-popup {
   display: grid;
   grid-template-columns: 1.3fr 0.7fr;
   min-height: 76vh;
-  background: radial-gradient(circle at 10% 10%, rgba(20, 184, 166, 0.18), transparent 30%),
-    linear-gradient(160deg, #f8fffe 0%, #e7f8f5 100%);
+  background: radial-gradient(circle at 10% 10%, rgba(0, 151, 167, 0.16), transparent 30%),
+    linear-gradient(160deg, #f1f5f9 0%, #e0f7fa 100%);
 }
 
 .preview-popup-media {
   min-height: 100%;
-  background: linear-gradient(150deg, #072b2a 0%, #0d9488 52%, #9ae6d9 100%);
+  background: linear-gradient(150deg, var(--activa-brand-dark) 0%, var(--activa-primary) 52%, #9bdfe5 100%);
 }
 
 .preview-popup-media img {
@@ -320,7 +403,7 @@
 
 .preview-popup-info {
   padding: 1.6rem;
-  background: linear-gradient(170deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 253, 250, 0.98) 100%);
+  background: linear-gradient(170deg, rgba(241, 245, 249, 0.98) 0%, rgba(224, 247, 250, 0.98) 100%);
   display: flex;
   flex-direction: column;
 }
@@ -335,11 +418,12 @@
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  background: rgba(15, 118, 110, 0.12);
-  color: #0f766e;
+  background: rgba(224, 247, 250, 0.98);
+  color: var(--activa-primary-hover);
   padding: 0.25rem 0.7rem;
   font-size: 0.74rem;
   font-weight: 700;
+  border: 1px solid rgba(0, 151, 167, 0.14);
 }
 
 .preview-popup-info h2 {
@@ -350,7 +434,7 @@
 
 .preview-popup-info p {
   margin: 0;
-  color: #52606d;
+  color: var(--activa-text-muted);
   line-height: 1.6;
 }
 
@@ -364,14 +448,14 @@
 .preview-edit-card {
   border-radius: 18px;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(20, 184, 166, 0.14);
-  box-shadow: 0 14px 30px rgba(15, 118, 110, 0.08);
+  background: rgba(241, 245, 249, 0.94);
+  border: 1px solid rgba(203, 213, 225, 0.88);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
 }
 
 .preview-stat-label {
   display: block;
-  color: #64748b;
+  color: var(--activa-text-muted);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -382,8 +466,8 @@
   margin-top: 0.95rem;
   padding: 1rem 1.05rem;
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 248, 244, 0.92));
-  border: 1px solid rgba(20, 184, 166, 0.14);
+  background: linear-gradient(180deg, rgba(241, 245, 249, 0.98), rgba(224, 247, 250, 0.92));
+  border: 1px solid rgba(203, 213, 225, 0.9);
 
   p {
     margin-top: 0.45rem;
@@ -410,8 +494,8 @@
 
 .template-editor-wrap {
   padding: 1.2rem;
-  background: radial-gradient(circle at 95% 0%, rgba(20, 184, 166, 0.12), transparent 40%),
-    linear-gradient(180deg, #fbfffe 0%, #eef8f7 100%);
+  background: radial-gradient(circle at 95% 0%, rgba(0, 151, 167, 0.12), transparent 40%),
+    linear-gradient(180deg, #eef2f7 0%, #dfe4ea 100%);
 }
 
 .template-editor-head h2 {
@@ -420,7 +504,90 @@
 
 .template-editor-head p {
   margin: 0.25rem 0 0;
-  color: #5d6b7d;
+  color: var(--activa-text-muted);
+}
+
+.template-editor-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.editor-close-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(203, 213, 225, 0.94);
+  background: rgba(241, 245, 249, 0.98);
+  color: var(--activa-brand-dark);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.editor-confirm-wrap {
+  padding: 1.25rem 1.2rem;
+  background: linear-gradient(180deg, rgba(241, 245, 249, 0.98), rgba(224, 247, 250, 0.92));
+
+  h3 {
+    margin: 0;
+    font-size: 1.12rem;
+    color: var(--activa-brand-dark);
+  }
+
+  p {
+    margin: 0.6rem 0 0;
+    color: var(--activa-text-muted);
+    line-height: 1.5;
+  }
+}
+
+.editor-confirm-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.7rem;
+  padding: 0.38rem 0.72rem;
+  border-radius: 999px;
+  background: rgba(224, 247, 250, 0.98);
+  border: 1px solid rgba(0, 151, 167, 0.18);
+  color: var(--activa-primary-hover);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.editor-confirm-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+}
+
+.btn-cancel,
+.btn-save {
+  min-width: 148px;
+  border-radius: 14px;
+  padding: 0.82rem 1rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-cancel {
+  background: rgba(241, 245, 249, 0.98);
+  border-color: rgba(203, 213, 225, 0.94);
+  color: var(--activa-brand-dark);
+  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.06);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, var(--activa-brand-dark), var(--activa-primary));
+  color: #fff;
+  box-shadow: 0 16px 30px rgba(10, 25, 47, 0.18);
 }
 
 .template-editor-grid {
@@ -432,10 +599,11 @@
 
 .editor-left-card,
 .editor-right-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(20, 184, 166, 0.15);
-  border-radius: 14px;
+  background: rgba(241, 245, 249, 0.96);
+  border: 1px solid rgba(203, 213, 225, 0.94);
+  border-radius: 18px;
   padding: 0.95rem;
+  box-shadow: 0 18px 34px rgba(15, 23, 42, 0.07);
 }
 
 .field-row-2 {
@@ -454,16 +622,16 @@
 }
 
 .editor-exercise-card {
-  border: 1px solid #dce8f2;
+  border: 1px solid rgba(203, 213, 225, 0.92);
   border-radius: 18px;
   padding: 0.8rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(242, 252, 249, 0.98));
-  box-shadow: 0 14px 28px rgba(15, 118, 110, 0.06);
+  background: linear-gradient(180deg, rgba(241, 245, 249, 0.98), rgba(224, 247, 250, 0.65));
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
 }
 
 .editor-exercise-card.selected {
-  border-color: rgba(20, 184, 166, 0.44);
-  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.16), 0 16px 30px rgba(15, 118, 110, 0.09);
+  border-color: rgba(0, 151, 167, 0.42);
+  box-shadow: 0 0 0 2px rgba(0, 151, 167, 0.14), 0 16px 30px rgba(15, 23, 42, 0.08);
 }
 
 .editor-exercise-top {
@@ -487,20 +655,22 @@
 
 .patient-row {
   width: 100%;
-  border: 1px solid #d9e8ef;
-  border-radius: 10px;
-  background: #f8fcff;
+  border: 1px solid rgba(203, 213, 225, 0.94);
+  border-radius: 14px;
+  background: rgba(241, 245, 249, 0.98);
   padding: 0.65rem 0.7rem;
   text-align: left;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .patient-row.selected {
-  border-color: #14b8a6;
-  background: rgba(20, 184, 166, 0.1);
+  border-color: rgba(0, 151, 167, 0.45);
+  background: rgba(224, 247, 250, 0.96);
+  box-shadow: 0 0 0 3px rgba(0, 151, 167, 0.08);
 }
 
 .template-name {
@@ -512,8 +682,15 @@
 .template-date,
 .loading-box {
   margin: 0.2rem 0 0;
-  color: #64748b;
+  color: var(--activa-text-muted);
   font-size: 0.82rem;
+}
+
+.loading-box {
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(241, 245, 249, 0.98);
+  border: 1px dashed rgba(0, 151, 167, 0.24);
 }
 
 @media (max-width: 980px) {

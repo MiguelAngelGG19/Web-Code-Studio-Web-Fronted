@@ -109,10 +109,21 @@
       </div>
 
       <div class="routines-list" *ngIf="!loadingRoutineTemplates; else loadingRoutinesTpl">
-        <button class="routine-row" [class.selected]="selectedRoutineTemplateId === routine.id_template" *ngFor="let routine of filteredRoutineTemplates" (click)="selectRoutineTemplate(routine.id_template)" type="button">
+        <button
+          class="routine-row"
+          [class.selected]="selectedRoutineTemplateId === routine.id_template"
+          [class.disabled]="isRoutineDisabledForSelectedExercise(routine)"
+          [disabled]="isRoutineDisabledForSelectedExercise(routine)"
+          *ngFor="let routine of filteredRoutineTemplates"
+          (click)="selectRoutineTemplate(routine.id_template)"
+          type="button"
+        >
           <div class="routine-main">
             <span class="routine-name">{{ routine.name }}</span>
             <span class="routine-meta">{{ routine.tag }} · {{ routine.exercisesCount }} ejercicio(s)</span>
+            <span class="routine-locked-badge" *ngIf="isRoutineDisabledForSelectedExercise(routine)">
+              Ya contiene este ejercicio
+            </span>
           </div>
           <span class="routine-date">{{ routine.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
         </button>

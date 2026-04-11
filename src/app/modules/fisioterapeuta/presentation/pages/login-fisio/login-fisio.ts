@@ -73,7 +73,13 @@ export class LoginFisioComponent implements OnInit {
           localStorage.setItem('token', token);
         }
 
-        // Extraemos el estatus real
+        // Guardamos id_physio directamente para evitar depender del JWT decode
+        const idPhysio = respuesta.fisio?.id_physio || respuesta.data?.fisio?.id_physio;
+        if (idPhysio) {
+          localStorage.setItem('id_physio', String(idPhysio));
+        }
+
+        // Extraemos el estatus real que nos acaba de mandar el backend
         const estatusUsuario = respuesta.fisio.status;
 
         this.messageService.add({ severity: 'success', summary: 'Bienvenido', detail: 'Credenciales verificadas con éxito.' });
