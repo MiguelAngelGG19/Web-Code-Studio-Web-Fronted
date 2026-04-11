@@ -9,7 +9,7 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
-// 1. IMPORTAMOS NUESTRO CASO DE USO
+// IMPORTAMOS NUESTRO CASO DE USO
 import { AuthUseCase } from '../../../../../core/auth/application/auth.use-case';
 
 @Component({
@@ -37,7 +37,7 @@ export class LoginFisioComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private messageService: MessageService,
-    private authUseCase: AuthUseCase // 2. INYECTAMOS EL CASO DE USO
+    private authUseCase: AuthUseCase
   ) {}
 
   ngOnInit(): void {
@@ -48,6 +48,9 @@ export class LoginFisioComponent implements OnInit {
   }
 
   onLogin() {
+    // 🪄 CANDADO: Previene el doble clic o el doble Enter
+    if (this.isLoading) return;
+
     this.messageService.clear();
 
     if (this.loginForm.invalid) {
@@ -58,30 +61,28 @@ export class LoginFisioComponent implements OnInit {
     this.isLoading = true;
     const credenciales = this.loginForm.value;
 
-    // 3. LLAMAMOS AL BACKEND REAL
+    // LLAMAMOS AL BACKEND REAL
     this.authUseCase.login(credenciales).subscribe({
       next: (respuesta: any) => {
         this.isLoading = false;
         
-        // 4. GUARDAMOS EL TOKEN REAL EN EL NAVEGADOR
+        // GUARDAMOS EL TOKEN REAL EN EL NAVEGADOR
         const token = respuesta.token || respuesta.data?.token;
         
         if (token) {
           localStorage.setItem('token', token);
         }
 
-        // Extraemos el estatus real que nos acaba de mandar el backend
+        // Extraemos el estatus real
         const estatusUsuario = respuesta.fisio.status;
 
         this.messageService.add({ severity: 'success', summary: 'Bienvenido', detail: 'Credenciales verificadas con éxito.' });
         
-        // 5. REDIRIGIMOS AL USUARIO DEPENDIENDO DE SU ESTATUS
+        // REDIRIGIMOS DEPENDIENDO DEL ESTATUS
         setTimeout(() => {
           if (estatusUsuario === 'pending_profile') {
-            // Si le faltan documentos, va a la pantalla de subida
             this.router.navigate(['/verificar-datos']);
           } else {
-            // Si es 'pending_approval' o 'approved', va directo a su panel
             this.router.navigate(['/dashboard/citas']); 
           }
         }, 1500);
@@ -95,7 +96,13 @@ export class LoginFisioComponent implements OnInit {
       }
     });
   }
-  enfocarSiguiente(idDelInput: string) {
+
+  // 🪄 FUNCIÓN MEJORADA: Salta de input y destruye el evento para no enviar el form vacío
+  enfocarSiguiente(idDelInput: string, event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     const elemento = document.getElementById(idDelInput);
     if (elemento) {
       elemento.focus();
