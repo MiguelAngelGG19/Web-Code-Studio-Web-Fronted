@@ -80,6 +80,17 @@
           <i class="pi pi-folder text-lg" [class.font-bold]="rlaRutinas.isActive"></i>
           <span *ngIf="!isDesktopCollapsed || isMobileMenuOpen" class="text-sm fadein" [class.font-bold]="rlaRutinas.isActive" [class.font-medium]="!rlaRutinas.isActive">Rutinas</span>
         </a>
+
+        <a routerLink="/dashboard/planes" routerLinkActive #rlaPlanes="routerLinkActive" (click)="closeMenu()" 
+           [ngClass]="(isDesktopCollapsed && !isMobileMenuOpen) ? 'justify-content-center' : 'gap-3'"
+           class="flex align-items-center p-3 border-round-md cursor-pointer no-underline transition-colors"
+           [class.bg-activa-primary-light]="rlaPlanes.isActive"
+           [class.text-activa-primary]="rlaPlanes.isActive"
+           [class.text-color-secondary]="!rlaPlanes.isActive"
+           [class.hover:surface-hover]="!rlaPlanes.isActive">
+          <i class="pi pi-star text-lg" [class.font-bold]="rlaPlanes.isActive"></i>
+          <span *ngIf="!isDesktopCollapsed || isMobileMenuOpen" class="text-sm fadein" [class.font-bold]="rlaPlanes.isActive" [class.font-medium]="!rlaPlanes.isActive">Membresía</span>
+        </a>
       </div>
 
       <div class="p-3 border-top-1 overflow-hidden flex-shrink-0" style="border-color: #E2E8F0 !important;">

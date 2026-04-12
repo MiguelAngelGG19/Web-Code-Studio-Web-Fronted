@@ -1,0 +1,53 @@
+<div class="planes-container max-w-full">
+  <div class="header-section text-center mb-6 pt-5">
+    <h1 class="text-4xl font-bold mb-3" style="color: #1e293b;">Impulsa tu Práctica Profesional</h1>
+    <p class="text-lg" style="color: #64748b; max-width: 600px; margin: 0 auto;">
+      Elige el plan que mejor se adapte al tamaño de tu clínica y aprovecha todo el potencial de ACTIVA para brindar una rehabilitación de primer nivel.
+    </p>
+  </div>
+
+  <div class="grid grid-nogutter justify-content-center align-items-stretch gap-5 mx-4 md:mx-auto" style="max-width: 1000px;">
+    
+    <!-- Itera sobre los planes configurados en el TS -->
+    <div *ngFor="let plan of plataformas" 
+         class="col-12 md:col-5 flex"
+         [class.destacado-col]="plan.destacado">
+         
+      <div class="plan-card w-full flex flex-column bg-white border-round-2xl shadow-3 overflow-hidden relative transition-all duration-300 hover:shadow-6"
+           [class.border-activa-primary]="plan.destacado"
+           [class.shadow-primary]="plan.destacado"
+           style="border: 2px solid transparent;">
+           
+        <!-- Etiqueta de Destacado / Mejor Valor -->
+        <div *ngIf="plan.destacado" class="ribbon bg-activa-primary text-white text-sm font-bold py-1 px-3 absolute text-center uppercase tracking-wider" style="top: 0; right: 0; width: 100%;">
+          Mejor Valor
+        </div>
+
+        <div class="card-header p-5 text-center mt-3 border-bottom-1 surface-border">
+          <h2 class="text-2xl font-semibold m-0 mb-3" style="color: #334155;">{{ plan.nombre }}</h2>
+          <div class="price-block flex justify-content-center align-items-baseline gap-1">
+            <span class="text-5xl font-bold" [ngStyle]="{'color': plan.destacado ? '#00A86B' : '#0ea5e9'}">{{ plan.precio }}</span>
+            <span class="text-color-secondary font-medium">{{ plan.periodo }}</span>
+          </div>
+          <p class="mt-4 mb-0 text-sm line-height-3" style="color: #64748b;">{{ plan.descripcion }}</p>
+        </div>
+
+        <div class="card-body p-5 flex-1 flex flex-column justify-content-between">
+          <ul class="list-none p-0 m-0 mb-5 flex flex-column gap-3">
+            <li *ngFor="let bene of plan.beneficios" class="flex align-items-start gap-2">
+              <i class="pi pi-check-circle mt-1" [ngStyle]="{'color': plan.destacado ? '#00A86B' : '#0ea5e9'}"></i>
+              <span class="text-color line-height-3">{{ bene }}</span>
+            </li>
+          </ul>
+
+          <button class="w-full flex justify-content-center align-items-center py-3 font-bold border-round-lg cursor-pointer transition-colors text-lg"
+                  [ngClass]="plan.destacado ? 'btn-primary-glow text-white' : 'btn-outline'"
+                  [ngStyle]="{'background-color': plan.destacado ? '#00A86B' : 'transparent', 'border': plan.destacado ? 'none' : '2px solid #0ea5e9', 'color': plan.destacado ? 'white' : '#0ea5e9'}"
+                  (click)="suscribir(plan.nombre)">
+            {{ plan.botonTexto }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
