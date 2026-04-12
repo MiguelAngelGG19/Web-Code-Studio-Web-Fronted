@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
+import { API_ROOT } from '../../../../../core/api-url';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,7 @@ export class HomeComponent implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get('http://localhost:3000/api/dashboard/stats', { headers }).subscribe({
+    this.http.get(`${API_ROOT}/dashboard/stats`, { headers }).subscribe({
       next: (res: any) => {
         this.kpis = res.kpis;
         this.citasHoy = res.citasHoy;

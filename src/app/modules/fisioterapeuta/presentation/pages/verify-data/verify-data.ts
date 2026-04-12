@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { ButtonModule } from 'primeng/button';
+import { API_ROOT } from '../../../../../core/api-url';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -140,7 +141,7 @@ export class VerifyDataComponent implements OnInit {
     formData.append('cedulaPdf', this.degreeFile);
     formData.append('ineFront', this.idFile);
 
-    this.http.post('http://localhost:3000/api/physiotherapists/upload-documents', formData)
+    this.http.post(`${API_ROOT}/physiotherapists/upload-documents`, formData)
       .subscribe({
         next: (res: any) => {
           this.isSubmitting = false;

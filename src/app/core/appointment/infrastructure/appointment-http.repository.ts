@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AppointmentRepository } from '../domain/appointment.repository';
+import { API_ROOT } from '../../api-url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentHttpRepository extends AppointmentRepository {
   
-  private apiUrl = 'http://localhost:3000/api/appointments';
+  private apiUrl = `${API_ROOT}/appointments`;
 
   constructor(private http: HttpClient) {
     super();

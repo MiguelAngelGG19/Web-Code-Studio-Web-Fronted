@@ -9,6 +9,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api'; 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { PasswordModule } from 'primeng/password';
+import { API_ROOT } from '../../../../../core/api-url';
 
 @Component({
   selector: 'app-perfil',
@@ -111,7 +112,7 @@ export class PerfilComponent implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.patch('http://localhost:3000/api/auth/update-email', 
+    this.http.patch(`${API_ROOT}/auth/update-email`, 
       { email: this.correoEditable }, 
       { headers }
     ).subscribe({
@@ -171,7 +172,7 @@ export class PerfilComponent implements OnInit {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.patch('http://localhost:3000/api/auth/update-password', 
+    this.http.patch(`${API_ROOT}/auth/update-password`, 
       { 
         passwordActual: this.passwordActual, 
         passwordNueva: this.passwordNueva 
