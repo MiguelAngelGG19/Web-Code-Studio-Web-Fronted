@@ -1,7 +1,6 @@
 {
-  "buildCommand": "npm run build -- --configuration production",
+  "buildCommand": "npx ng build --configuration production",
   "outputDirectory": "dist/web-code-frontend/browser",
-  "framework": "angular",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
