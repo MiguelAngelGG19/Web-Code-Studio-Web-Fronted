@@ -1,6 +1,8 @@
 <ng-container *ngIf="estadoCuenta === 'approved'">
   <div class="flex h-screen w-full bg-activa-main relative overflow-hidden">
 
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
     <div *ngIf="isMobileMenuOpen" 
          class="fixed top-0 left-0 w-full h-full bg-black-alpha-40 z-4 md:hidden transition-all"
          (click)="closeMenu()"></div>
@@ -81,7 +83,7 @@
           <span *ngIf="!isDesktopCollapsed || isMobileMenuOpen" class="text-sm fadein" [class.font-bold]="rlaRutinas.isActive" [class.font-medium]="!rlaRutinas.isActive">Rutinas</span>
         </a>
 
-        <a routerLink="/dashboard/planes" routerLinkActive #rlaPlanes="routerLinkActive" (click)="closeMenu()" 
+        <a routerLink="/dashboard/subscription" routerLinkActive #rlaPlanes="routerLinkActive" (click)="closeMenu()" 
            [ngClass]="(isDesktopCollapsed && !isMobileMenuOpen) ? 'justify-content-center' : 'gap-3'"
            class="flex align-items-center p-3 border-round-md cursor-pointer no-underline transition-colors"
            [class.bg-activa-primary-light]="rlaPlanes.isActive"

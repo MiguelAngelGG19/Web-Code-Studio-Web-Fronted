@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button'; 
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-menu',
@@ -12,7 +13,8 @@ import { MenuItem } from 'primeng/api';
     CommonModule, 
     RouterModule, 
     ButtonModule,
-    MenuModule 
+    MenuModule,
+    ConfirmDialogModule,
   ],
   templateUrl: './menu.html'
 })
