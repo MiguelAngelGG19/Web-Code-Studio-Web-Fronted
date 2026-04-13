@@ -89,7 +89,7 @@ export class LoginFisioComponent implements OnInit {
           if (estatusUsuario === 'pending_profile') {
             this.router.navigate(['/verificar-datos']);
           } else {
-            this.router.navigate(['/dashboard/citas']); 
+            this.router.navigate(['/dashboard/inicio']); 
           }
         }, 1500);
 

@@ -14,7 +14,7 @@ import { LoginFisioComponent } from './modules/fisioterapeuta/presentation/pages
 import { VerifyDataComponent } from './modules/fisioterapeuta/presentation/pages/verify-data/verify-data'; 
 import { HomeComponent } from './modules/fisioterapeuta/presentation/pages/home/home';
 import { PerfilComponent } from './modules/fisioterapeuta/presentation/pages/profile/profile';
-import { PlanesComponent } from './modules/fisioterapeuta/presentation/pages/planes/planes';
+import { SubscriptionComponent } from './modules/fisioterapeuta/presentation/pages/subscription/subscription';
 
 // IMPORTAMOS EL CADENERO
 import { authGuard } from './core/auth/application/auth.guard';
@@ -59,7 +59,7 @@ export const routes: Routes = [
       { path: 'pacientes', component: PatientListComponent },
       { path: 'nuevo-paciente', component: PatientCreateComponent },
       { path: 'perfil', component: PerfilComponent },
-      { path: 'planes', component: PlanesComponent },
+      { path: 'subscription', component: SubscriptionComponent },
       
       // Módulo de Agenda
       { path: 'citas', component: AppointmentsComponent },
